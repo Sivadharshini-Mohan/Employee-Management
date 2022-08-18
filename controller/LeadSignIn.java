@@ -40,7 +40,7 @@ public class LeadSignIn {
      */
     public void displayTrainers() {
         List<Trainer> trainers = trainerService.getTrainer();
-
+        System.out.println("Welcome Lead");
         for(Trainer trainer : trainers) {
             System.out.println(trainer.getName() + " - " + trainer.getId());   
         }
