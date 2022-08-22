@@ -1,15 +1,7 @@
-package com.i2i.project.controller;
-
-import com.i2i.project.services.TrainerService;
-import com.i2i.project.services.TraineeService;
-import com.i2i.project.util.ValidationUtil;
-import com.i2i.project.customException.CustomException;
-import com.i2i.project.model.Trainer;
-import com.i2i.project.model.Trainee;
-
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
+
 
 /**
  * <p>
@@ -23,13 +15,13 @@ public class EmployeeController {
     private TraineeService traineeService = new TraineeService();
     LeadSignIn leadSignIn = new LeadSignIn();
     boolean is_check = true;
-    public static void main(String[] args) {
-    EmployeeController controller = new EmployeeController();
-        
+
+    public static void main(String[] args) throws CustomException {
+        EmployeeController controller = new EmployeeController(); 
         try {
             controller.selectEmployeeRole(); 
         } catch(InputMismatchException e) {
-            System.out.println("Entered value not a integer, please try again!!");
+            throw new CustomException("Entered value not a integer, please try again!!",e);
         }
     }
 
@@ -438,6 +430,7 @@ public class EmployeeController {
                 leadLogin();
                 break;
             default :
+
                 System. exit(0);
         }
     }
@@ -477,16 +470,9 @@ public class EmployeeController {
      *
      */
     public void deleteTrainee() throws CustomException {						
-        System.out.println("Enter trainee name which you want to remove:");
-        String traineeName = scanner.next();
-       // int index = traineeService.findTraineeIndexByName(traineeName);
-        List<Trainee> trainees = traineeService.getTrainee();
-        if (trainees.size() != 0) {
-            traineeService.deleteTraineeByIndex(trainerService.getTrainer());
-            System.out.println("Trainee " + traineeName + " deleted sucessfully");
-        } else {
-            throw new CustomException("Trainer id not fount, not able to delete");
-        }
+        System.out.println("Enter trainee EmailId which you want to remove:");
+        String traineeEmail = scanner.next();
+        traineeService.deleteTraineeByEmail(traineeEmail);
     }
 
     /**
@@ -496,16 +482,11 @@ public class EmployeeController {
      *
      */
     public void deleteTrainer() throws CustomException {                                		
-        System.out.println("Enter trainer name which you want to remove:");
-        String trainerName = scanner.next();
-        //int index = trainerService.findTrainerIndexByName(trainerName);
-        List<Trainer> trainers = trainerService.getTrainer();
-        if (trainers.size() != 0) {
-            trainerService.deleteTrainerAndIndex(trainerService.getTrainer());
-            System.out.println("Trainer " + trainerName + " deleted sucessfully");
-        } else {
-            throw new CustomException("Trainer id not fount, not able to delete");
-        }
+        System.out.println("Enter trainer EmailId which you want to remove:");
+        String trainerEmail = scanner.next();
+        trainerService.deleteTrainerByEmail(trainerEmail);
+            System.out.println("Trainer " + trainerEmail + " deleted sucessfully");
+        
     }
     
 }

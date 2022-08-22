@@ -1,7 +1,3 @@
-package com.i2i.project.DAO;
-
-import com.i2i.project.model.Trainee;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -49,8 +45,8 @@ public class TraineeDao {
      * @return trainees 
      * 
      */
-     public void deleteTraineeByIndex(int index) {
-        trainees.remove(index);
+     public void deleteTraineeByObject(Trainee trainee) {
+        trainees.remove(trainee);
     }
     
 }

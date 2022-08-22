@@ -1,8 +1,3 @@
-package com.i2i.project.services;
-
-import com.i2i.project.dao.TraineeDao;
-import com.i2i.project.model.Trainee;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -110,8 +105,13 @@ public class TraineeService {
     * @param index
     * 
     */
-    public void deleteTraineeByIndex(int index) {
-        traineeDao.deleteTraineeByIndex(index);
+    public void deleteTraineeByEmail(String email) {
+        for(Trainee trainee : traineeDao.retriveTrainee()) {
+            if (email.equals(trainee.getId())) {
+               traineeDao.deleteTraineeByObject(trainee);
+               break;
+            }
+        }
     }
 
 }
