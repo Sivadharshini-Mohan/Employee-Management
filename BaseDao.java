@@ -1,5 +1,19 @@
-public class BaseDao {
+import java.sql.Connection;
+import java.sql.Statement;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.*;
 
-    Connection connection = DriveManger.getConnection(Constants.DRIVE_URL,Constant.SQL_USER_ID,Constant.SQL_PASSWORD);
-    Statement statement = 
+public class BaseDao {
+    public Connection mysqlConnection() {
+       try {
+            Connection connection = DriverManager.getConnection(Constants.DRIVE_URL,Constants.SQL_USER_ID,Constants.SQL_PASSWORD);
+            return connection;
+        } catch (Exception e) {
+            
+        }
+        return null;
+    }
+    
+    
 }

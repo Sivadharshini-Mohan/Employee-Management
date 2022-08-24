@@ -6,10 +6,8 @@ public class EmployeeDto {
     long mobileNumber;
     int experience;
     int batch;
-    String role;
-    
 
-    EmployeeDto(String name, String email, String dob, String gender, long mobileNumber, int experience, int batch, String role) {
+    public EmployeeDto(String name, String email, String dob, String gender, long mobileNumber, int experience, int batch) {
         this.name = name;
         this.email = email;
         this.dob = dob;
@@ -17,7 +15,6 @@ public class EmployeeDto {
         this.mobileNumber = mobileNumber;
         this.experience = experience;
         this.batch = batch;
-        this.role = role;
     }
         
     public String getName() {  
@@ -74,14 +71,6 @@ public class EmployeeDto {
     
     public int getBatch() {
         return batch;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-    
-    public String getRole() {
-        return role;
     }
 }
 

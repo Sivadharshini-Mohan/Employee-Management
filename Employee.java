@@ -6,10 +6,10 @@ public class Employee {
     long mobileNumber;
     int experience;
     int batch;
-    String role;
+    
     
 
-    Employee(String name, String email, String dob,String gender,long mobileNumber,int experience,int batch,String role) {
+    Employee(String name, String email, String dob,String gender,long mobileNumber,int experience,int batch) {
         this.name = name;
         this.email = email;
         this.dob = dob;
@@ -17,7 +17,6 @@ public class Employee {
         this.mobileNumber = mobileNumber;
         this.experience = experience;
         this.batch = batch;
-        this.role = role;
     }
         
     public String getName() {  
@@ -76,13 +75,6 @@ public class Employee {
         return batch;
     }
 
-    public void setRole(String role) {
-        this.role = role;
-    }
-    
-    public String getRole() {
-        return role;
-    }
 }
 
 

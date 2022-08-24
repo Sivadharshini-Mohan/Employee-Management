@@ -8,9 +8,11 @@ import java.util.Scanner;
  * transfer to Data access object
  * </p>
  */
-public class EmployeeService {    
-    private EmployeeDao employeeDao = new EmployeeDao();
-    private Mapper mapper = new Mapper();
+public class EmployeeService { 
+     
+    EmployeeDao employeeDao = new EmployeeDao();
+    RoleDao roleDao = new RoleDao();
+    Mapper mapper = new Mapper();
     /**  
      * <p>  
      * Get the Employee input from controller and transfer to employee Database acess object  
@@ -19,8 +21,13 @@ public class EmployeeService {
      * @param employeeDto
      * 
      */
-    public void addEmployee(EmployeeDto employeeDto) {		
+    public boolean addEmployee(EmployeeDto employeeDto) {	
         Employee employee = mapper.employeeDtoToEmployee(employeeDto);
         employeeDao.insertEmployee(employee);
+        return true;
+    }
+    
+    public void employeeRole(String employeeRole) {
+        roleDao.role(employeeRole);
     }
 }
