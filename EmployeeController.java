@@ -1,6 +1,7 @@
 import org.apache.log4j.*;
 import org.apache.log4j.BasicConfigurator;
 import java.util.Scanner;
+import java.util.List;
 
 /**
  * <p>
@@ -11,8 +12,6 @@ public class EmployeeController {
     private static Logger logger = Logger.getLogger(EmployeeController.class);
     private Scanner scanner = new Scanner(System.in);
     EmployeeService employeeService = new EmployeeService();
-    EmployeeController employeeController;
-    boolean is_check = true;
 
     public static void main(String[] args) {
         EmployeeController controller = new EmployeeController();
@@ -26,67 +25,88 @@ public class EmployeeController {
           
         switch(userRole){
             case 1 :
-                createEmployee();
-                employeeService.employeeRole("Trainer");
+                try {
+                    createEmployee("Trainer");
+                } catch(CustomException exception) {
+                    logger.info(exception.getMessage());
+                }
                 break;
+
             case 2 :
-                createEmployee();
-                employeeService.employeeRole("Trainee");
+                try {
+                    createEmployee("Trainee");
+                } catch(CustomException exception) {
+                    logger.info(exception.getMessage());
+                }
                 break;
+
             default :
                 System. exit(0);
         }
     }  
+
     /**
      * <p>
      * Create a employee detail 
      * </p>
      */     
-    public void createEmployee() {	
-        logger.info("Enter the employee name : ");
-        String name = nameValidation();    
-        logger.info("Enter the employee Email id ");
-        String email = emailValidation();
-        logger.info("Enter the employee dob ");
-        String dob = dobValidation();
-        int age = ValidationUtil.calculateAge(dob);
-        logger.info("Your age :" + age);
-        logger.info("Enter employee gender");
-        String gender = scanner.next();
-        logger.info("Enter employee mobileNumber");
-        long mobileNumber = scanner.nextLong();
-        logger.info("Enter the employee experience ");
-        int experience = scanner.nextInt();
-        logger.info("Enter the employee batch ");
-        int batch = scanner.nextInt();
-        EmployeeDto employeeDto = new EmployeeDto(name, email, dob, gender, mobileNumber, experience, batch);
-        employeeService.addEmployee(employeeDto);  
-        logger.info("Employee data created sucessfully");       
-        boolean isCondition = true;
-        
-
+    public void createEmployee(String employeeRole) throws CustomException {
+        try {	
+            EmployeeDto employeeDto = new EmployeeDto();
+            logger.info("Enter the employee name : ");
+            employeeDto.setName(nameValidation());  
+            logger.info("Enter the employee Email id ");
+            employeeDto.setEmailId(emailValidation()); 
+            logger.info("Enter the employee dob ");
+            employeeDto.setName(dateValidation()); 
+            logger.info("Enter employee gender");
+            String gender = scanner.next();
+            employeeDto.setGender(gender); 
+            logger.info("Enter employee mobileNumber");
+            employeeDto.setMobileNumber(mobileNumberValidation());
+            logger.info("Enter the employee date of joining ");
+            employeeDto.setDoj(dateValidation()); 
+            logger.info("Enter the employee batch ");
+            int batch = scanner.nextInt();
+            employeeDto.setBatch(batch); 
+            employeeService.addEmployee(employeeDto, employeeRole);
+        } catch (CustomException exception) {
+            throw new CustomException(exception.getMessage());
+        }  
+        logger.info("Employee data created sucessfully");  
+        logger.info("\n Press 1 to Display the Employee detail");
+        int choice = scanner.nextInt();
+        switch (choice) {
+            case 1 :
+                List<EmployeeDto> employees = employeeService.retriveEmployee(employeeRole);
+                for(EmployeeDto employee : employees) {
+                    logger.info(employee);
+                }
+                break;
+        }     
     } 
 
     public String nameValidation() {
         String name = null;
-        boolean isValid = false;
-        do {
+         boolean isValid = false;         
+         do {
             String employeeName = scanner.next();
             isValid = ValidationUtil.isValid(employeeName, ValidationUtil.NAME_REGEX);
 
             if (isValid) {
-                name = employeeName;
-		break; 
+                name = employeeName; 
+                break;
             } else {
                 logger.error("Please enter valid input!!!");
             } 
         } while(!isValid);
+        System.out.println(name);
         return name;
     }
     
     public String emailValidation() {
          String emailId = null;
-         boolean isValid = false;
+         boolean isValid = false;         
          do {
             String employeeId = scanner.next();
             isValid = ValidationUtil.isValid(employeeId, ValidationUtil.ID_REGEX);
@@ -101,20 +121,39 @@ public class EmployeeController {
         return emailId;
     }
 
-    public String dobValidation() {
-        String dob = null;
-        boolean isValid = false;
-        do {
-            String employeeDob = scanner.next();
-            isValid = ValidationUtil.isValid(employeeDob, ValidationUtil.DATE_REGEX);
+    public String dateValidation() {
+         String date = null;
+         boolean isValid = false;         
+         do {
+            String validateDate = scanner.next();
+            isValid = ValidationUtil.isValid(validateDate, ValidationUtil.DATE_REGEX);
 
             if (isValid) {
-                dob = employeeDob; 
+                date = validateDate; 
                 break;
             } else {
                 logger.error("Please enter valid input!!!");
             } 
         } while(!isValid);
-        return dob;
+        System.out.println(date);
+        return date;
     }
+    
+    public long mobileNumberValidation() {
+        String employeeMobileNumber;
+        boolean isValid = false;
+        do {
+            employeeMobileNumber = scanner.next();
+            isValid = ValidationUtil.isValid(employeeMobileNumber, ValidationUtil.MOBILE_NUMBER_REGEX);
+
+            if (isValid) {
+                break;
+            } else {
+                logger.error("Please enter valid input!!!");
+            } 
+        } while(!isValid);
+        long mobileNo = Long.valueOf(employeeMobileNumber);
+        return mobileNo; 
+    }
+    
 }

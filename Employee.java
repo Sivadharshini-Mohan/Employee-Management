@@ -4,18 +4,16 @@ public class Employee {
     String dob;
     String gender;
     long mobileNumber;
-    int experience;
+    String doj;
     int batch;
     
-    
-
-    Employee(String name, String email, String dob,String gender,long mobileNumber,int experience,int batch) {
+    Employee(String name, String email, String dob,String gender,long mobileNumber,String doj,int batch) {
         this.name = name;
         this.email = email;
         this.dob = dob;
         this.gender = gender;
         this.mobileNumber = mobileNumber;
-        this.experience = experience;
+        this.doj = doj;
         this.batch = batch;
     }
         
@@ -27,11 +25,11 @@ public class Employee {
         this.name = name;  
     }
 
-    public String getId() {  
+    public String getEmailId() {  
         return email;  
     }
 
-    public void setId(String email) {  
+    public void setEmailId(String email) {  
         this.email = email;  
     }
     
@@ -59,12 +57,12 @@ public class Employee {
         return mobileNumber;
     }
 
-    public void setExperience(int experience) {
-        this.experience = experience;
+    public void setDoj(String doj) {
+        this.doj = doj;
     }
     
-    public  int getExperience() {
-        return experience;
+    public  String getDoj() {
+        return doj;
     }
 
     public void setBatch(int batch) {
@@ -73,6 +71,12 @@ public class Employee {
     
     public int getBatch() {
         return batch;
+    }
+    
+    public String toString() {
+        return "Name: " + name +  "\n Email Id: " + email + "\n Date of birth:" + dob +
+             "\n Gender:" + gender + "\n Mobile Number:" + mobileNumber + "\n Date od joining:" + doj + "\n Batch:" + batch ;
+
     }
 
 }

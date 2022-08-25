@@ -10,9 +10,10 @@ import java.util.Scanner;
  */
 public class EmployeeService { 
      
-    EmployeeDao employeeDao = new EmployeeDao();
-    RoleDao roleDao = new RoleDao();
-    Mapper mapper = new Mapper();
+    private EmployeeDao employeeDao = new EmployeeDao();
+    private RoleDao roleDao = new RoleDao();
+    private EmployeeMapper employeeMapper = new EmployeeMapper();
+
     /**  
      * <p>  
      * Get the Employee input from controller and transfer to employee Database acess object  
@@ -21,13 +22,23 @@ public class EmployeeService {
      * @param employeeDto
      * 
      */
-    public boolean addEmployee(EmployeeDto employeeDto) {	
-        Employee employee = mapper.employeeDtoToEmployee(employeeDto);
-        employeeDao.insertEmployee(employee);
-        return true;
+    public boolean addEmployee(EmployeeDto employeeDto, String employeeRole) throws CustomException {
+        Employee employee = employeeMapper.employeeDtoToEmployee(employeeDto);
+        int employeeId = employeeDao.insertEmployee(employee);
+        int roleId = roleDao.retriveRoleIdByName(employeeRole);
+        return roleDao.assignEmployeeRole(employeeId, roleId);
+            
     }
     
-    public void employeeRole(String employeeRole) {
-        roleDao.role(employeeRole);
+    public List<EmployeeDto> retriveEmployee(String employeeRole) throws CustomException  {
+        List<Employee> employee =  employeeDao.retriveTrainer();
+        List<EmployeeDto> employeeDto =  new ArrayList<EmployeeDto>();
+        for(Employee employees : employee) {
+            EmployeeDto employeeData = employeeMapper.employeeToEmployeeDto(employees);
+            employeeDto.add(employeeData);
+        }
+        return employeeDto; 
     }
+    
+    
 }
