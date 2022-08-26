@@ -4,4 +4,5 @@ public class Constants {
     static final String SQL_PASSWORD = "Shiva@2001";
     static final String TRAINEE = "Trainee";
     static final String TRAINER = "Trainer";
+    static final String DATE_TIME_FORMAT = "d/M/yyyy";
 }

@@ -1,19 +1,23 @@
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
+
 public class Employee {  
     String name;  
     String email;
-    String dob;
+    LocalDate dateOfBirth;
     String gender;
     long mobileNumber;
-    String doj;
+    LocalDate dateOfJoin;
     int batch;
     
-    Employee(String name, String email, String dob,String gender,long mobileNumber,String doj,int batch) {
+    Employee(String name, String email, String dateOfBirth, String gender,long mobileNumber,String dateOfJoin,int batch) {
         this.name = name;
         this.email = email;
-        this.dob = dob;
+        this.dateOfBirth = LocalDate.parse(dateOfBirth);
         this.gender = gender;
         this.mobileNumber = mobileNumber;
-        this.doj = doj;
+        this.dateOfJoin = LocalDate.parse(dateOfJoin);
         this.batch = batch;
     }
         
@@ -33,12 +37,12 @@ public class Employee {
         this.email = email;  
     }
     
-    public void setDob(String dob) {
-        this.dob = dob;
+    public void setDob(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
     
-    public String getDob() {
-        return dob;
+    public LocalDate getDob() {
+        return dateOfBirth;
     }
 
     public void setGender(String gender) {
@@ -57,12 +61,12 @@ public class Employee {
         return mobileNumber;
     }
 
-    public void setDoj(String doj) {
-        this.doj = doj;
+    public void setDoj(LocalDate dateOfJoin) {
+        this.dateOfJoin = dateOfJoin;
     }
     
-    public  String getDoj() {
-        return doj;
+    public  LocalDate getDoj() {
+        return dateOfJoin;
     }
 
     public void setBatch(int batch) {
@@ -74,8 +78,8 @@ public class Employee {
     }
     
     public String toString() {
-        return "Name: " + name +  "\n Email Id: " + email + "\n Date of birth:" + dob +
-             "\n Gender:" + gender + "\n Mobile Number:" + mobileNumber + "\n Date od joining:" + doj + "\n Batch:" + batch ;
+        return "Name: " + name +  "\n Email Id: " + email + "\n Date of birth:" + dateOfBirth +
+             "\n Gender:" + gender + "\n Mobile Number:" + mobileNumber + "\n Date of joining:" + dateOfJoin + "\n Batch:" + batch ;
 
     }
 

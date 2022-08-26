@@ -2,6 +2,10 @@ import org.apache.log4j.*;
 import org.apache.log4j.BasicConfigurator;
 import java.util.Scanner;
 import java.util.List;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
 
 /**
  * <p>
@@ -20,13 +24,14 @@ public class EmployeeController {
     }
 
     public void selectEmployeeRole() {
-        logger.info("press 1 to create trainer detail \npress 2 to create trainee detail" );
+        logger.info("press 1 to create trainer detail \npress 2 to create trainee detail \n press 3 to display employees"
+            + "\n press 4 to update employee detail \n press 5 to delete employee detail" );
         int userRole = scanner.nextInt();
           
         switch(userRole){
             case 1 :
                 try {
-                    createEmployee("Trainer");
+                    createEmployee("CONSTANTS.TRAINER");
                 } catch(CustomException exception) {
                     logger.info(exception.getMessage());
                 }
@@ -34,11 +39,37 @@ public class EmployeeController {
 
             case 2 :
                 try {
-                    createEmployee("Trainee");
+                    createEmployee("CONSTANTS.TRAINEE");
                 } catch(CustomException exception) {
                     logger.info(exception.getMessage());
                 }
                 break;
+
+            case 3 :
+                try {
+                    System.out.println("\n Select role: press 1 for trainer \n press 2 for trainee");
+                    int employeeRole = scanner.nextInt();
+                    displayEmployee(employeeRole);
+                } catch(CustomException exception) {
+                    logger.info(exception.getMessage());
+                }
+                break;
+
+            case 4 :
+                try {
+                    updateEmployee();
+                } catch(CustomException exception) {
+                    logger.info(exception.getMessage());
+                } 
+                break;
+
+           case 5 :
+               try {
+                    deleteEmployee();
+                } catch(CustomException exception) {
+                    logger.info(exception.getMessage());
+                } 
+                break;          
 
             default :
                 System. exit(0);
@@ -58,7 +89,7 @@ public class EmployeeController {
             logger.info("Enter the employee Email id ");
             employeeDto.setEmailId(emailValidation()); 
             logger.info("Enter the employee dob ");
-            employeeDto.setName(dateValidation()); 
+            employeeDto.setDob(dateValidation()); 
             logger.info("Enter employee gender");
             String gender = scanner.next();
             employeeDto.setGender(gender); 
@@ -73,19 +104,44 @@ public class EmployeeController {
         } catch (CustomException exception) {
             throw new CustomException(exception.getMessage());
         }  
-        logger.info("Employee data created sucessfully");  
-        logger.info("\n Press 1 to Display the Employee detail");
-        int choice = scanner.nextInt();
-        switch (choice) {
-            case 1 :
-                List<EmployeeDto> employees = employeeService.retriveEmployee(employeeRole);
-                for(EmployeeDto employee : employees) {
-                    logger.info(employee);
-                }
-                break;
-        }     
+        logger.info("Employee data created sucessfully");       
     } 
 
+    public void displayEmployee(int employeeRole) throws CustomException {
+        List<EmployeeDto> employeeDtos = employeeService.retriveEmployee(employeeRole);
+            for(EmployeeDto employeeDto : employeeDtos) {
+                logger.info(employeeDto);
+            }
+    }
+
+    public void updateEmployee() throws CustomException {
+        logger.info("Enter email id which employee data you want modify :");
+        String email = emailValidation();
+        EmployeeDto employeeDto = new EmployeeDto();
+        logger.info("Enter new employee name : ");
+        employeeDto.setName(nameValidation());  
+        logger.info("Enter new employee Email id ");
+        employeeDto.setEmailId(emailValidation()); 
+        logger.info("Enter new employee dob, Required Format is d/M/yyyy : ");
+        employeeDto.setDob(dateValidation()); 
+        logger.info("Enter new employee gender : ");
+        String gender = scanner.next();
+        employeeDto.setGender(gender); 
+        logger.info("Enter new employee mobileNumber");
+        employeeDto.setMobileNumber(mobileNumberValidation());
+        logger.info("Enter new employee date of joining, Required Format is d/M/yyyy : ");
+        employeeDto.setDoj(dateValidation()); 
+        logger.info("Enter new employee batch ");
+        int batch = scanner.nextInt();
+        employeeDto.setBatch(batch); 
+        employeeService.updateEmployee(employeeDto, email);
+    }
+
+    public void deleteEmployee() throws CustomException {
+        logger.info("Enter email id which employee data you want to delete :");
+        String email = emailValidation();
+        employeeService.deleteEmployee(email);
+    }
     public String nameValidation() {
         String name = null;
          boolean isValid = false;         
@@ -100,7 +156,6 @@ public class EmployeeController {
                 logger.error("Please enter valid input!!!");
             } 
         } while(!isValid);
-        System.out.println(name);
         return name;
     }
     
@@ -122,22 +177,23 @@ public class EmployeeController {
     }
 
     public String dateValidation() {
-         String date = null;
+         DateTimeFormatter format = DateTimeFormatter.ofPattern(Constants.DATE_TIME_FORMAT);
+         LocalDate date = null;
          boolean isValid = false;         
          do {
-            String validateDate = scanner.next();
-            isValid = ValidationUtil.isValid(validateDate, ValidationUtil.DATE_REGEX);
-
-            if (isValid) {
-                date = validateDate; 
-                break;
-            } else {
-                logger.error("Please enter valid input!!!");
-            } 
+            String tempDate = scanner.next();
+            isValid = ValidationUtil.isValid(tempDate, ValidationUtil.DATE_REGEX);
+            try {
+		date = LocalDate.parse(tempDate, format);                
+		isValid = true;
+                return tempDate.toString();
+	    } catch (DateTimeParseException e) {
+		System.out.println("Invalid Date Format");
+	    }
         } while(!isValid);
-        System.out.println(date);
-        return date;
+        return null;
     }
+
     
     public long mobileNumberValidation() {
         String employeeMobileNumber;

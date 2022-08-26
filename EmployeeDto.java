@@ -1,19 +1,21 @@
+import java.time.LocalDate;
+
 public class EmployeeDto {  
     String name;  
     String email;
-    String dob;
+    LocalDate dateOfBirth;
     String gender;
     long mobileNumber;
-    String doj;
+    LocalDate dateOfJoin;
     int batch;
 
-    public EmployeeDto(String name, String email, String dob, String gender, long mobileNumber, String doj, int batch) {
+    public EmployeeDto(String name, String email, String dateOfBirth, String gender, long mobileNumber, String dateOfJoin, int batch) {
         this.name = name;
         this.email = email;
-        this.dob = dob;
+        this.dateOfBirth = dateOfBirth;
         this.gender = gender;
         this.mobileNumber = mobileNumber;
-        this.doj = doj;
+        this.dateOfJoin = dateOfJoin;
         this.batch = batch;
     }
     public EmployeeDto() {
@@ -35,12 +37,12 @@ public class EmployeeDto {
         this.email = email;  
     }
     
-    public void setDob(String dob) {
-        this.dob = dob;
+    public void setDob(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
     
-    public String getDob() {
-        return dob;
+    public LocalDate getDob() {
+        return dateOfBirth;
     }
 
     public void setGender(String gender) {
@@ -59,12 +61,12 @@ public class EmployeeDto {
         return mobileNumber;
     }
 
-    public void setDoj(String doj) {
-        this.doj = doj;
+    public void setDoj(LocalDate dateOfJoin) {
+        this.dateOfJoin = dateOfJoin;
     }
     
-    public String getDoj() {
-        return doj;
+    public LocalDate getDoj() {
+        return dateOfJoin;
     }
 
     public void setBatch(int batch) {
@@ -75,8 +77,8 @@ public class EmployeeDto {
         return batch;
     }
     public String toString() {
-        return "Name: " + name +  "\n Email Id: " + email + "\n Date of birth:" + dob +
-             "\n Gender:" + gender + "\n Mobile Number:" + mobileNumber + "\n Date od joining:" + doj + "\n Batch:" + batch ;
+        return "Name: " + name +  "\n Email Id: " + email + "\n Date of birth:" + dateOfBirth +
+             "\n Gender:" + gender + "\n Mobile Number:" + mobileNumber + "\n Date od joining:" + dateOfJoin + "\n Batch:" + batch ;
 
     }
 }

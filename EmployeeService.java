@@ -30,15 +30,25 @@ public class EmployeeService {
             
     }
     
-    public List<EmployeeDto> retriveEmployee(String employeeRole) throws CustomException  {
-        List<Employee> employee =  employeeDao.retriveTrainer();
-        List<EmployeeDto> employeeDto =  new ArrayList<EmployeeDto>();
-        for(Employee employees : employee) {
-            EmployeeDto employeeData = employeeMapper.employeeToEmployeeDto(employees);
-            employeeDto.add(employeeData);
+    public List<EmployeeDto> retriveEmployee(int employeeRole) throws CustomException  {
+        List<Employee> employees =  employeeDao.retriveEmployee(employeeRole);
+        List<EmployeeDto> employeeDtoList =  new ArrayList<EmployeeDto>();
+        System.out.println(employees);
+        for(Employee employee : employees) {
+            System.out.println("wertyuiop@@@@");
+            EmployeeDto employeeDto = employeeMapper.employeeToEmployeeDto(employee);
+            employeeDtoList.add(employeeDto);
         }
-        return employeeDto; 
+        return employeeDtoList; 
     }
     
+    public void updateEmployee(EmployeeDto employeeDto, String email) throws CustomException {
+        Employee employee = employeeMapper.employeeDtoToEmployee(employeeDto);
+        employeeDao.updateEmployee(employee, email);
     
+    } 
+    
+    public void deleteEmployee(String email) throws CustomException {
+        employeeDao.deleteEmployee(email);
+    }
 }

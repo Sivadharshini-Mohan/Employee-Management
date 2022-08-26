@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.List;
 import java.util.ArrayList;
+import java.sql.Date;
+import java.time.LocalDate;
 
 public class EmployeeDao extends BaseDao {
     private Connection connection = mysqlConnection();
@@ -19,14 +21,15 @@ public class EmployeeDao extends BaseDao {
 
         try {
             int employeeId = 0 ;
-            String query = " insert into  employee (name, email_id, dob, gender, mobile_number, date_of_joining, batch) values (?, ?, ?, ?, ?, ?, ? )";
+            String query = " insert into  employee (name, email_id, dob, gender, mobile_number, date_of_joining, batch,active_status) "
+                + " values (?, ?, ?, ?, ?, ?, ?, 1 )";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, employee.getName());
             preparedStatement.setString(2, employee.getEmailId());
-            preparedStatement.setString(3, employee.getDob());
+            preparedStatement.setDate(3, java.sql.Date.valueOf(employee.getDob()));
             preparedStatement.setString(4, employee.getGender());
             preparedStatement.setLong(5, employee.getMobileNumber());
-            preparedStatement.setString(6, employee.getDoj());
+            preparedStatement.setDate(6, java.sql.Date.valueOf(employee.getDoj()));
             preparedStatement.setInt(7, employee.getBatch());
             preparedStatement.execute();
             preparedStatement = connection.prepareStatement("select last_insert_id() from employee");
@@ -39,11 +42,11 @@ public class EmployeeDao extends BaseDao {
         }
     }
     
-    public List<Employee> retriveTrainer() throws CustomException {
+    public List<Employee> retriveEmployee(int employeeRole) throws CustomException {
             List<Employee> employees = new ArrayList<Employee>(); 
         try {
-            String query = "select employee.*, employee_role.role_id from employee_role inner join employee on "
-                + "employee.id = employee_role.employee_id;" ;
+            String query = "select employee.* from employee_role inner join employee on employee.id = employee_role.employee_id "
+                + " where employee.active_status = 1 and employee_role.role_id =" +   employeeRole;
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             ResultSet rs= preparedStatement.executeQuery();
             while(rs.next()){
@@ -62,5 +65,36 @@ public class EmployeeDao extends BaseDao {
         }
         return employees;
     }    
+
+    public boolean updateEmployee(Employee employee, String email) throws CustomException {
+        try{
+            String query = "update employee set name = ? , email_id = ?, dob = ?, gender = ?, mobile_number = ?, date_of_joining = ?," 
+                 + "batch = ?, active_status = 1 where email_id = ? ";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, employee.getName());
+            preparedStatement.setString(2, employee.getEmailId());
+            preparedStatement.setDate(3, java.sql.Date.valueOf(employee.getDob()));
+            preparedStatement.setString(4, employee.getGender());
+            preparedStatement.setLong(5, employee.getMobileNumber());
+            preparedStatement.setDate(6, java.sql.Date.valueOf(employee.getDoj()));
+            preparedStatement.setInt(7, employee.getBatch());
+            preparedStatement.setString(8, email);
+            return preparedStatement.execute();
+            
+        } catch (Exception exception) {
+            throw new CustomException(exception.getMessage());
+        }
+    }
+    
+    public void deleteEmployee(String email) throws CustomException {
+       try{
+            String query = "update employee set active_status = 0 where email_id = " + email; 
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.execute();
+       } catch (Exception exception) {
+            throw new CustomException(exception.getMessage());
+        }
+    }
+
 }
 
