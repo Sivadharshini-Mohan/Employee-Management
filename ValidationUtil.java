@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
  * </p>
  */
 public class ValidationUtil {
-   static String NAME_REGEX = "^[A-Za-z]\\w{5,29}$";
+   static String NAME_REGEX = "^[A-Za-z]\\w{3,29}$";
    static String ID_REGEX = "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$";
    static String  DATE_REGEX = "^[0-3]?[0-9]/[0-3]?[0-9]/(?:[0-9]{2})?[0-9]{2}$";
    static String MOBILE_NUMBER_REGEX = "^[6-9][0-9]{9}$";

@@ -65,7 +65,7 @@ public class Employee {
         this.dateOfJoin = dateOfJoin;
     }
     
-    public  LocalDate getDoj() {
+    public LocalDate getDoj() {
         return dateOfJoin;
     }
 
@@ -80,9 +80,7 @@ public class Employee {
     public String toString() {
         return "Name: " + name +  "\n Email Id: " + email + "\n Date of birth:" + dateOfBirth +
              "\n Gender:" + gender + "\n Mobile Number:" + mobileNumber + "\n Date of joining:" + dateOfJoin + "\n Batch:" + batch ;
-
     }
-
 }
 
 

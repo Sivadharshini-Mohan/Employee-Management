@@ -1,4 +1,5 @@
 import java.time.LocalDate;
+import java.util.Date;
 
 public class EmployeeDto {  
     String name;  
@@ -8,16 +9,16 @@ public class EmployeeDto {
     long mobileNumber;
     LocalDate dateOfJoin;
     int batch;
-
-    public EmployeeDto(String name, String email, String dateOfBirth, String gender, long mobileNumber, String dateOfJoin, int batch) {
+    EmployeeDto (String name, String email, String dateOfBirth, String gender,long mobileNumber, String dateOfJoin,int batch) {
         this.name = name;
         this.email = email;
-        this.dateOfBirth = dateOfBirth;
+        this.dateOfBirth = LocalDate.parse(dateOfBirth);
         this.gender = gender;
         this.mobileNumber = mobileNumber;
-        this.dateOfJoin = dateOfJoin;
+        this.dateOfJoin = LocalDate.parse(dateOfJoin);
         this.batch = batch;
     }
+
     public EmployeeDto() {
     }
         

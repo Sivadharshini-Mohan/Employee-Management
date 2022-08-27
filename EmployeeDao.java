@@ -36,17 +36,18 @@ public class EmployeeDao extends BaseDao {
             ResultSet resultset = preparedStatement.executeQuery();
             resultset.next();
             employeeId = Integer.valueOf(resultset.getString("last_insert_id()"));
+            System.out.println(employeeId);
             return employeeId;
         } catch(Exception exception) {
             throw new CustomException(exception.getMessage());
         }
     }
     
-    public List<Employee> retriveEmployee(int employeeRole) throws CustomException {
+    public List<Employee> retriveEmployees(int employeeRole) throws CustomException {
             List<Employee> employees = new ArrayList<Employee>(); 
         try {
-            String query = "select employee.* from employee_role inner join employee on employee.id = employee_role.employee_id "
-                + " where employee.active_status = 1 and employee_role.role_id =" +   employeeRole;
+            String query = "select employee.*  from employee, employee_role where employee.id = employee_role.employee_id and employee.active_status = 1 and " 
+                + " employee_role.role_id=" + employeeRole;
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             ResultSet rs= preparedStatement.executeQuery();
             while(rs.next()){
@@ -65,6 +66,30 @@ public class EmployeeDao extends BaseDao {
         }
         return employees;
     }    
+
+    public List<Employee> retriveEmployee(int employeeId) throws CustomException {
+            List<Employee> employees = new ArrayList<Employee>(); 
+        try {
+            String query = "select employee.*  from employee where id = " + employeeId;
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            ResultSet rs= preparedStatement.executeQuery();
+            while(rs.next()){
+                String name = rs.getString("name");
+                String emailId = rs.getString("email_id");
+                String dob = rs.getString("dob");
+                String gender = rs.getString("gender");
+                long mobileNumber = rs.getLong("mobile_number");
+                String doj = rs.getString("date_of_joining");
+                int batch = rs.getInt("batch");
+                Employee employee = new Employee(name, emailId, dob, gender, mobileNumber, doj, batch);
+                employees.add(employee);
+            }
+        } catch (Exception exception) {
+            throw new CustomException(exception.getMessage());
+        }
+        return employees;
+    }    
+
 
     public boolean updateEmployee(Employee employee, String email) throws CustomException {
         try{

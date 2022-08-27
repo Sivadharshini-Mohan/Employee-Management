@@ -24,14 +24,14 @@ public class EmployeeController {
     }
 
     public void selectEmployeeRole() {
-        logger.info("press 1 to create trainer detail \npress 2 to create trainee detail \n press 3 to display employees"
-            + "\n press 4 to update employee detail \n press 5 to delete employee detail" );
-        int userRole = scanner.nextInt();
+        logger.info("\n press 1 to create trainer detail \n press 2 to create trainee detail \n press 3 to display all employees"
+            + " \n press 4 to display employee \n press 5 to update employee detail \n press 6 to delete employee detail" );
+        int userChoice = scanner.nextInt();
           
-        switch(userRole){
+        switch(userChoice){
             case 1 :
                 try {
-                    createEmployee("CONSTANTS.TRAINER");
+                    createEmployee(Constants.TRAINER);
                 } catch(CustomException exception) {
                     logger.info(exception.getMessage());
                 }
@@ -39,7 +39,7 @@ public class EmployeeController {
 
             case 2 :
                 try {
-                    createEmployee("CONSTANTS.TRAINEE");
+                    createEmployee(Constants.TRAINEE);
                 } catch(CustomException exception) {
                     logger.info(exception.getMessage());
                 }
@@ -47,9 +47,9 @@ public class EmployeeController {
 
             case 3 :
                 try {
-                    System.out.println("\n Select role: press 1 for trainer \n press 2 for trainee");
+                    logger.info("\n Select role: \n press 1 for trainer \n press 2 for trainee");
                     int employeeRole = scanner.nextInt();
-                    displayEmployee(employeeRole);
+                    displayEmployees(employeeRole);
                 } catch(CustomException exception) {
                     logger.info(exception.getMessage());
                 }
@@ -57,13 +57,23 @@ public class EmployeeController {
 
             case 4 :
                 try {
+                    logger.info(" Enter employee id which employee detail you want to show: ");
+                    int employeeId = scanner.nextInt();
+                    displayEmployee(employeeId);
+                } catch(CustomException exception) {
+                    logger.info(exception.getMessage());
+                }
+                break;
+            
+            case 5 :
+                try {
                     updateEmployee();
                 } catch(CustomException exception) {
                     logger.info(exception.getMessage());
                 } 
                 break;
 
-           case 5 :
+           case 6 :
                try {
                     deleteEmployee();
                 } catch(CustomException exception) {
@@ -90,9 +100,8 @@ public class EmployeeController {
             employeeDto.setEmailId(emailValidation()); 
             logger.info("Enter the employee dob ");
             employeeDto.setDob(dateValidation()); 
-            logger.info("Enter employee gender");
-            String gender = scanner.next();
-            employeeDto.setGender(gender); 
+            logger.info(" Enter employee gender: \n press 1 to Male \n press 2 to Female");
+            employeeDto.setGender(genderOption()); 
             logger.info("Enter employee mobileNumber");
             employeeDto.setMobileNumber(mobileNumberValidation());
             logger.info("Enter the employee date of joining ");
@@ -107,8 +116,15 @@ public class EmployeeController {
         logger.info("Employee data created sucessfully");       
     } 
 
-    public void displayEmployee(int employeeRole) throws CustomException {
-        List<EmployeeDto> employeeDtos = employeeService.retriveEmployee(employeeRole);
+    public void displayEmployees(int employeeRole) throws CustomException {
+        List<EmployeeDto> employeeDtos = employeeService.getEmployees(employeeRole);
+            for(EmployeeDto employeeDto : employeeDtos) {
+                logger.info(employeeDto);
+            }
+    }
+
+    public void displayEmployee(int employeeId) throws CustomException {
+        List<EmployeeDto> employeeDtos = employeeService.getEmployee(employeeId);
             for(EmployeeDto employeeDto : employeeDtos) {
                 logger.info(employeeDto);
             }
@@ -176,7 +192,7 @@ public class EmployeeController {
         return emailId;
     }
 
-    public String dateValidation() {
+    public LocalDate dateValidation() {
          DateTimeFormatter format = DateTimeFormatter.ofPattern(Constants.DATE_TIME_FORMAT);
          LocalDate date = null;
          boolean isValid = false;         
@@ -186,7 +202,7 @@ public class EmployeeController {
             try {
 		date = LocalDate.parse(tempDate, format);                
 		isValid = true;
-                return tempDate.toString();
+                return date;
 	    } catch (DateTimeParseException e) {
 		System.out.println("Invalid Date Format");
 	    }
@@ -194,7 +210,34 @@ public class EmployeeController {
         return null;
     }
 
-    
+    public String genderOption() {
+        String gender = null;
+        boolean isValid = true;
+        do {
+            String employeeGender = scanner.next();
+
+            switch(employeeGender) {
+                case "1":
+                    gender = Gender.Male.gender;
+                    break;
+
+                case "2":
+                    gender = Gender.Female.gender;
+                    break;
+
+                case "3":
+                    gender = Gender.Others.gender;
+                    break;
+
+                default:
+                    return "Invalid Option ";
+                           
+            }
+        } while(!isValid);
+        return gender;
+
+        
+    }  
     public long mobileNumberValidation() {
         String employeeMobileNumber;
         boolean isValid = false;
