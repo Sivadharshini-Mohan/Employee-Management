@@ -6,28 +6,38 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
-
 /**
  * <p>
- * Implementation of get input from employee
- * </p>
+ * EmployeeController class  will communicate with user and get the options to 
+ * Add, Display, Update and Delete (CRUD) 
+ * </p> 
+ * @author Sivadharshini Mohan
+ * @version 1.0
  */
 public class EmployeeController {
     private static Logger logger = Logger.getLogger(EmployeeController.class);
     private Scanner scanner = new Scanner(System.in);
-    EmployeeService employeeService = new EmployeeService();
+    private EmployeeService employeeService = new EmployeeService();
 
     public static void main(String[] args) {
         EmployeeController controller = new EmployeeController();
         BasicConfigurator.configure(); 
-        controller.selectEmployeeRole();
+        controller.choiceSelection();
     }
-
-    public void selectEmployeeRole() {
+    
+    /**
+     * <p>
+     * It shows the option to Add, Update, Delete,  
+     * Display employee
+     * </p>
+     * @return {@link void} return nothing 
+     */
+    public void choiceSelection() {
+        for(;;){
         logger.info("\n press 1 to create trainer detail \n press 2 to create trainee detail \n press 3 to display all employees"
             + " \n press 4 to display employee \n press 5 to update employee detail \n press 6 to delete employee detail" );
         int userChoice = scanner.nextInt();
-          
+       
         switch(userChoice){
             case 1 :
                 try {
@@ -84,12 +94,16 @@ public class EmployeeController {
             default :
                 System. exit(0);
         }
-    }  
+    }
+}  
 
     /**
      * <p>
-     * Create a employee detail 
+     * Create a employee detail  
      * </p>
+     * @param employeeRole Trainer/Trainee
+     * @throws CustomException 
+     * @return {@link void} return nothing
      */     
     public void createEmployee(String employeeRole) throws CustomException {
         try {	
@@ -109,30 +123,56 @@ public class EmployeeController {
             logger.info("Enter the employee batch ");
             int batch = scanner.nextInt();
             employeeDto.setBatch(batch); 
-            employeeService.addEmployee(employeeDto, employeeRole);
+            logger.info(employeeService.addEmployeeByRole(employeeDto, employeeRole));
         } catch (CustomException exception) {
             throw new CustomException(exception.getMessage());
-        }  
-        logger.info("Employee data created sucessfully");       
+        }     
     } 
 
+    /**
+     * <p>
+     * Display all employee details
+     * </p>
+     * @param employeeRole Trainer/Trainee
+     * @throws CustomException  
+     * @return {@link void} return nothing 
+     *
+     */     
     public void displayEmployees(int employeeRole) throws CustomException {
-        List<EmployeeDto> employeeDtos = employeeService.getEmployees(employeeRole);
+        List<EmployeeDto> employeeDtos = employeeService.getEmployeesByRole(employeeRole);
             for(EmployeeDto employeeDto : employeeDtos) {
                 logger.info(employeeDto);
             }
     }
 
+    /**
+     * <p>
+     * Display particular employee detail
+     * </p>
+     * @param employeeId id of employee
+     * @throws CustomException  
+     * @return {@link void} return nothing 
+     *
+     */     
     public void displayEmployee(int employeeId) throws CustomException {
-        List<EmployeeDto> employeeDtos = employeeService.getEmployee(employeeId);
+        List<EmployeeDto> employeeDtos = employeeService.getEmployeeById(employeeId);
             for(EmployeeDto employeeDto : employeeDtos) {
                 logger.info(employeeDto);
             }
     }
 
+    /**
+     * <p>
+     * Update employee detail  
+     * </p>
+     * @throws CustomException 
+     * 
+     * @return {@link void} return nothing 
+     *
+     */     
     public void updateEmployee() throws CustomException {
-        logger.info("Enter email id which employee data you want modify :");
-        String email = emailValidation();
+        logger.info("Enter employee id which employee detail you want to modify :");
+        int employeeId = scanner.nextInt();
         EmployeeDto employeeDto = new EmployeeDto();
         logger.info("Enter new employee name : ");
         employeeDto.setName(nameValidation());  
@@ -150,18 +190,33 @@ public class EmployeeController {
         logger.info("Enter new employee batch ");
         int batch = scanner.nextInt();
         employeeDto.setBatch(batch); 
-        employeeService.updateEmployee(employeeDto, email);
+        logger.info(employeeService.updateEmployee(employeeDto, employeeId));
     }
 
+    /**
+     * <p>
+     * Delete employee detail  
+     * </p>
+     * @throws CustomException 
+     * @return {@link void} return nothing 
+     *
+     */     
     public void deleteEmployee() throws CustomException {
-        logger.info("Enter email id which employee data you want to delete :");
-        String email = emailValidation();
-        employeeService.deleteEmployee(email);
+        logger.info("Enter employee id which employee data you want to delete :");
+        int employeeId = scanner.nextInt();
+        logger.info(employeeService.deleteEmployee(employeeId));
     }
+
+    /**
+     * <p>
+     * This method is used to validate employee name. 
+     * </p>  
+     * @return {@link string} return valid name
+     */
     public String nameValidation() {
         String name = null;
          boolean isValid = false;         
-         do {
+         for(;;) {
             String employeeName = scanner.next();
             isValid = ValidationUtil.isValid(employeeName, ValidationUtil.NAME_REGEX);
 
@@ -175,10 +230,16 @@ public class EmployeeController {
         return name;
     }
     
+    /**
+     * <p>
+     * This method is used to validate employee email id
+     * </p>  
+     * @return {@link string} return valid email id
+     */
     public String emailValidation() {
          String emailId = null;
          boolean isValid = false;         
-         do {
+         for(;;) {
             String employeeId = scanner.next();
             isValid = ValidationUtil.isValid(employeeId, ValidationUtil.ID_REGEX);
 
@@ -188,15 +249,21 @@ public class EmployeeController {
             } else {
                 logger.error("Please enter valid input!!!");
             } 
-        } while(!isValid);
+        } 
         return emailId;
     }
 
+     /**
+     * <p>
+     * This method is used to validate the date. 
+     * </p>  
+     * @return {@link LocalDate} return valid date
+     */
     public LocalDate dateValidation() {
          DateTimeFormatter format = DateTimeFormatter.ofPattern(Constants.DATE_TIME_FORMAT);
          LocalDate date = null;
          boolean isValid = false;         
-         do {
+         for(;;) {
             String tempDate = scanner.next();
             isValid = ValidationUtil.isValid(tempDate, ValidationUtil.DATE_REGEX);
             try {
@@ -206,42 +273,53 @@ public class EmployeeController {
 	    } catch (DateTimeParseException e) {
 		System.out.println("Invalid Date Format");
 	    }
-        } while(!isValid);
-        return null;
-    }
+        } 
 
+    }
+    
+     /**
+     * <p>
+     * This method is used to select the gender option by using enum
+     * </p>  
+     * @return {@link string} return gender 
+     */
     public String genderOption() {
         String gender = null;
         boolean isValid = true;
-        do {
+        for(;;) {
             String employeeGender = scanner.next();
 
             switch(employeeGender) {
                 case "1":
-                    gender = Gender.Male.gender;
-                    break;
+                    return Gender.Male.gender;
+                    
 
                 case "2":
-                    gender = Gender.Female.gender;
-                    break;
+                    return Gender.Female.gender;
+                    
 
                 case "3":
-                    gender = Gender.Others.gender;
-                    break;
+                    return Gender.Others.gender;
+                    
 
                 default:
-                    return "Invalid Option ";
+                    return "Invalid Option";
                            
             }
-        } while(!isValid);
-        return gender;
-
-        
+        } 
+       
     }  
+
+    /**
+     * <p>
+     * This method is used to validate employee mobile number
+     * </p>  
+     * @return {@link long} return valid mobile number
+     */
     public long mobileNumberValidation() {
         String employeeMobileNumber;
         boolean isValid = false;
-        do {
+        for(;;) {
             employeeMobileNumber = scanner.next();
             isValid = ValidationUtil.isValid(employeeMobileNumber, ValidationUtil.MOBILE_NUMBER_REGEX);
 
@@ -250,9 +328,8 @@ public class EmployeeController {
             } else {
                 logger.error("Please enter valid input!!!");
             } 
-        } while(!isValid);
+        } 
         long mobileNo = Long.valueOf(employeeMobileNumber);
         return mobileNo; 
     }
-    
 }

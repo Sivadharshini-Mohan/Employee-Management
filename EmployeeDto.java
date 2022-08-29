@@ -9,7 +9,7 @@ public class EmployeeDto {
     long mobileNumber;
     LocalDate dateOfJoin;
     int batch;
-    EmployeeDto (String name, String email, String dateOfBirth, String gender,long mobileNumber, String dateOfJoin,int batch) {
+    public EmployeeDto(String name, String email, String dateOfBirth, String gender,long mobileNumber, String dateOfJoin,int batch) {
         this.name = name;
         this.email = email;
         this.dateOfBirth = LocalDate.parse(dateOfBirth);
@@ -78,7 +78,7 @@ public class EmployeeDto {
         return batch;
     }
     public String toString() {
-        return "Name: " + name +  "\n Email Id: " + email + "\n Date of birth:" + dateOfBirth +
+        return "\n Name: " + name +  "\n Email Id: " + email + "\n Date of birth:" + dateOfBirth +
              "\n Gender:" + gender + "\n Mobile Number:" + mobileNumber + "\n Date od joining:" + dateOfJoin + "\n Batch:" + batch ;
 
     }

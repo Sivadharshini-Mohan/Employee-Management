@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.sql.*;
 
 public class BaseDao {
-    public Connection mysqlConnection() {
+    Connection mysqlConnection() {
        try {
             Connection connection = DriverManager.getConnection(Constants.DRIVE_URL,Constants.SQL_USER_ID,Constants.SQL_PASSWORD);
             return connection;

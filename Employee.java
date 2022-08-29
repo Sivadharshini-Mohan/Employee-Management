@@ -11,7 +11,7 @@ public class Employee {
     LocalDate dateOfJoin;
     int batch;
     
-    Employee(String name, String email, String dateOfBirth, String gender,long mobileNumber,String dateOfJoin,int batch) {
+    public Employee(String name, String email, String dateOfBirth, String gender, long mobileNumber, String dateOfJoin, int batch) {
         this.name = name;
         this.email = email;
         this.dateOfBirth = LocalDate.parse(dateOfBirth);
