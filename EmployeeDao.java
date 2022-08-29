@@ -32,15 +32,16 @@ public class EmployeeDao extends BaseDao {
 
         try {
             int employeeId = 0 ;
-            String query = " insert into  employee (name, email_id, dob, gender, mobile_number, date_of_joining, batch,active_status) "
-                + " values (?, ?, ?, ?, ?, ?, ?, 1 )";
+            String query = " insert into  employee (name, email_id, dob, gender, mobile_number, date_of_joining, batch, active_status, created_date) "
+                + " values (?, ?, ?, ?, ?, ?, ?, 1 , current_timestamp)";
             preparedStatement = connection.prepareStatement(query);
             preparedStatement(employee);
             preparedStatement.execute();
-            preparedStatement = connection.prepareStatement("select last_insert_id() from employee");
+            preparedStatement = connection.prepareStatement("select * from employee order by id  desc limit 1");
             ResultSet resultset = preparedStatement.executeQuery();
-            resultset.next();
-            employeeId = Integer.valueOf(resultset.getString("last_insert_id()"));
+            while(resultset.next()){
+            employeeId = resultset.getInt("id");
+            }
             return employeeId;
         } catch(Exception exception) {
             throw new CustomException(exception.getMessage());
@@ -59,12 +60,13 @@ public class EmployeeDao extends BaseDao {
     public List<Employee> retriveEmployeeByRole(int employeeRole) throws CustomException {
             List<Employee> employees = new ArrayList<Employee>(); 
         try {
-            String query = " select employee.*,employee_role.role_id from employee_role inner join employee on employee.id = employee_role.employee_id where employee.active_status = 1 "
-                + " and employee_role.role_id = " + employeeRole ;
+            String query = " select employee.*,employee_role.role_id from employee_role inner join employee on employee.id = employee_role.employee_id "
+                + " where employee.active_status = 1 and employee_role.role_id = " + employeeRole ;
              System.out.println(employeeRole);
             preparedStatement = connection.prepareStatement(query);
             ResultSet rs= preparedStatement.executeQuery();
             while(rs.next()){
+                int id = rs.getInt("id");
                 String name = rs.getString("name");
                 String emailId = rs.getString("email_id");
                 String dob = rs.getString("dob");
@@ -72,7 +74,7 @@ public class EmployeeDao extends BaseDao {
                 long mobileNumber = rs.getLong("mobile_number");
                 String doj = rs.getString("date_of_joining");
                 int batch = rs.getInt("batch");
-                Employee employee = new Employee(name, emailId, dob, gender, mobileNumber, doj, batch);
+                Employee employee = new Employee(id, name, emailId, dob, gender, mobileNumber, doj, batch);
                 employees.add(employee);
             }
         } catch (Exception exception) {
@@ -126,7 +128,7 @@ public class EmployeeDao extends BaseDao {
     public boolean updateEmployeeById(Employee employee, int id) throws CustomException {
         try{
             String query = "update employee set name = ? , email_id = ?, dob = ?, gender = ?, mobile_number = ?, date_of_joining = ?," 
-                 + "batch = ?, active_status = 1 where id = ? ";
+                 + "batch = ?, active_status = 1 , updated_date = current_timestamp where id = ? ";
             preparedStatement = connection.prepareStatement(query);
             preparedStatement(employee);
             preparedStatement.setInt(8, id);

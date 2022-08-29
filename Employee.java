@@ -1,8 +1,8 @@
 import java.time.LocalDate;
-import java.time.Period;
 import java.time.format.DateTimeFormatter;
 
-public class Employee {  
+public class Employee { 
+    int id; 
     String name;  
     String email;
     LocalDate dateOfBirth;
@@ -11,7 +11,18 @@ public class Employee {
     LocalDate dateOfJoin;
     int batch;
     
-    public Employee(String name, String email, String dateOfBirth, String gender, long mobileNumber, String dateOfJoin, int batch) {
+    public Employee(String name, String email, String dateOfBirth, String gender, long mobileNumber, String dateOfJoin, int batch ) {
+        this.name = name;
+        this.email = email;
+        this.dateOfBirth = LocalDate.parse(dateOfBirth);
+        this.gender = gender;
+        this.mobileNumber = mobileNumber;
+        this.dateOfJoin = LocalDate.parse(dateOfJoin);
+        this.batch = batch;
+    }
+    
+    public Employee(int id, String name, String email, String dateOfBirth, String gender, long mobileNumber, String dateOfJoin, int batch ) {
+        this.id = id;
         this.name = name;
         this.email = email;
         this.dateOfBirth = LocalDate.parse(dateOfBirth);
@@ -21,6 +32,13 @@ public class Employee {
         this.batch = batch;
     }
         
+    public int getId() {
+        return id;
+    } 
+    
+    public void setId() {
+        this.id = id;
+    }
     public String getName() {  
         return name;  
     }
@@ -78,7 +96,7 @@ public class Employee {
     }
     
     public String toString() {
-        return "Name: " + name +  "\n Email Id: " + email + "\n Date of birth:" + dateOfBirth +
+        return  "Employee Id : " + id + "\n Name: " + name +  "\n Email Id: " + email + "\n Date of birth:" + dateOfBirth +
              "\n Gender:" + gender + "\n Mobile Number:" + mobileNumber + "\n Date of joining:" + dateOfJoin + "\n Batch:" + batch ;
     }
 }

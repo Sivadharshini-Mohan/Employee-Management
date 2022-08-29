@@ -13,11 +13,12 @@ import java.time.format.DateTimeParseException;
  * </p> 
  * @author Sivadharshini Mohan
  * @version 1.0
- */
+ **/
 public class EmployeeController {
     private static Logger logger = Logger.getLogger(EmployeeController.class);
     private Scanner scanner = new Scanner(System.in);
     private EmployeeService employeeService = new EmployeeService();
+    private ProjectService projectService = new ProjectService();
 
     public static void main(String[] args) {
         EmployeeController controller = new EmployeeController();
@@ -33,12 +34,15 @@ public class EmployeeController {
      * @return {@link void} return nothing 
      */
     public void choiceSelection() {
-        for(;;){
-        logger.info("\n press 1 to create trainer detail \n press 2 to create trainee detail \n press 3 to display all employees"
-            + " \n press 4 to display employee \n press 5 to update employee detail \n press 6 to delete employee detail" );
+        logger.info("\n press 1 to create trainer detail \n press 2 to create trainee detail \n press 3 to create project manager detail "
+            + " \n press 4 to display all employees"
+            + " \n press 5 to display employee \n press 6 to update employee detail \n press 7 to delete employee detail"
+            + " \n press 8 to project manager portal");
+            
         int userChoice = scanner.nextInt();
-       
+          
         switch(userChoice){
+
             case 1 :
                 try {
                     createEmployee(Constants.TRAINER);
@@ -54,8 +58,16 @@ public class EmployeeController {
                     logger.info(exception.getMessage());
                 }
                 break;
+           
+            case 3 : 
+                try {
+                    createEmployee(Constants.MANAGER);
+                } catch(CustomException exception) {
+                    logger.info(exception.getMessage());
+                }
+                break;
 
-            case 3 :
+            case 4 :
                 try {
                     logger.info("\n Select role: \n press 1 for trainer \n press 2 for trainee");
                     int employeeRole = scanner.nextInt();
@@ -65,7 +77,7 @@ public class EmployeeController {
                 }
                 break;
 
-            case 4 :
+            case 5 :
                 try {
                     logger.info(" Enter employee id which employee detail you want to show: ");
                     int employeeId = scanner.nextInt();
@@ -75,7 +87,7 @@ public class EmployeeController {
                 }
                 break;
             
-            case 5 :
+            case 6 :
                 try {
                     updateEmployee();
                 } catch(CustomException exception) {
@@ -83,19 +95,26 @@ public class EmployeeController {
                 } 
                 break;
 
-           case 6 :
+           case 7 :
                try {
                     deleteEmployee();
                 } catch(CustomException exception) {
                     logger.info(exception.getMessage());
                 } 
-                break;          
-
+                break; 
+            
+            case 8 :
+                try {
+                    projectManagerLogin();
+                } catch(CustomException exception) {
+                    logger.info(exception.getMessage());
+                }
+                break;         
+            
             default :
                 System. exit(0);
         }
-    }
-}  
+    }  
 
     /**
      * <p>
@@ -114,7 +133,7 @@ public class EmployeeController {
             employeeDto.setEmailId(emailValidation()); 
             logger.info("Enter the employee dob ");
             employeeDto.setDob(dateValidation()); 
-            logger.info(" Enter employee gender: \n press 1 to Male \n press 2 to Female");
+            logger.info(" Enter employee gender: \n press 1 to Male \n press 2 to Female \n press 3 to Others");
             employeeDto.setGender(genderOption()); 
             logger.info("Enter employee mobileNumber");
             employeeDto.setMobileNumber(mobileNumberValidation());
@@ -180,7 +199,7 @@ public class EmployeeController {
         employeeDto.setEmailId(emailValidation()); 
         logger.info("Enter new employee dob, Required Format is d/M/yyyy : ");
         employeeDto.setDob(dateValidation()); 
-        logger.info("Enter new employee gender : ");
+        logger.info("Enter new employee gender : \n press 1 to Male \n press 2 to Female \n press 3 to Others");
         String gender = scanner.next();
         employeeDto.setGender(gender); 
         logger.info("Enter new employee mobileNumber");
@@ -207,6 +226,59 @@ public class EmployeeController {
         logger.info(employeeService.deleteEmployee(employeeId));
     }
 
+    public void projectManagerLogin() {
+        System.out.println("Enter user id :");
+        String userId = scanner.next();
+        System.out.println("Enter you password");
+        String password = scanner.next();
+        projectManangerPortal(userId, password);
+    }
+
+    public void projectManangerPortal(String userId ,String password) {
+        if (userId.equals("manager") && password.equals("ideai2i")) {
+            logger.info("\n press 1 to create new project \n press 2 to update status \n press 3 to display all projects"
+                + " \n press 4 to delete project" );
+            int userChoice = scanner.nextInt();
+        
+            switch(userchoice) {
+                case 1:
+                    createProject();
+                    break;
+
+                 case 2:
+                     logger.info("Enter project name : ");
+                     
+                     break;
+
+                 case 3:
+                     
+                     break;
+   
+                 case 4:
+                     
+                     break;
+             }
+        } else {
+            logger.info("Invalid userId and password");
+        }  
+    }
+
+    public void createProject() {
+        ProjectDto projectDto = new ProjectDto();
+        logger.info("Enter project name: ");
+        projectDto.setName(scanner.next());
+        logger.info("Enter project client name: ");
+        projectDto.setClientName(scanner.next());
+        logger.info("Enter project company name: ");
+        projectDto.setCompanyName(scanner.next());
+        logger.info("Enter project start date: ");
+        projectDto.setStartDate(scanner.next());
+        logger.info("Enter project Status: ");
+        projectDto.setProjectStatus(scanner.next());
+        projectService.addProject(projectDto);     
+    }
+
+
     /**
      * <p>
      * This method is used to validate employee name. 
@@ -216,7 +288,7 @@ public class EmployeeController {
     public String nameValidation() {
         String name = null;
          boolean isValid = false;         
-         for(;;) {
+         do {
             String employeeName = scanner.next();
             isValid = ValidationUtil.isValid(employeeName, ValidationUtil.NAME_REGEX);
 
@@ -239,7 +311,7 @@ public class EmployeeController {
     public String emailValidation() {
          String emailId = null;
          boolean isValid = false;         
-         for(;;) {
+         do {
             String employeeId = scanner.next();
             isValid = ValidationUtil.isValid(employeeId, ValidationUtil.ID_REGEX);
 
@@ -249,7 +321,7 @@ public class EmployeeController {
             } else {
                 logger.error("Please enter valid input!!!");
             } 
-        } 
+        } while(!isValid);
         return emailId;
     }
 
@@ -263,7 +335,7 @@ public class EmployeeController {
          DateTimeFormatter format = DateTimeFormatter.ofPattern(Constants.DATE_TIME_FORMAT);
          LocalDate date = null;
          boolean isValid = false;         
-         for(;;) {
+         do {
             String tempDate = scanner.next();
             isValid = ValidationUtil.isValid(tempDate, ValidationUtil.DATE_REGEX);
             try {
@@ -273,8 +345,8 @@ public class EmployeeController {
 	    } catch (DateTimeParseException e) {
 		System.out.println("Invalid Date Format");
 	    }
-        } 
-
+        } while(!isValid);
+        return null;
     }
     
      /**
@@ -286,28 +358,28 @@ public class EmployeeController {
     public String genderOption() {
         String gender = null;
         boolean isValid = true;
-        for(;;) {
+        do {
             String employeeGender = scanner.next();
 
             switch(employeeGender) {
                 case "1":
-                    return Gender.Male.gender;
-                    
+                    gender = Gender.Male.gender;
+                    break;
 
                 case "2":
-                    return Gender.Female.gender;
-                    
+                    gender = Gender.Female.gender;
+                    break;
 
                 case "3":
-                    return Gender.Others.gender;
-                    
+                    gender = Gender.Others.gender;
+                    break;
 
                 default:
                     return "Invalid Option";
                            
             }
-        } 
-       
+        } while(!isValid);
+        return gender;
     }  
 
     /**
@@ -319,7 +391,7 @@ public class EmployeeController {
     public long mobileNumberValidation() {
         String employeeMobileNumber;
         boolean isValid = false;
-        for(;;) {
+        do {
             employeeMobileNumber = scanner.next();
             isValid = ValidationUtil.isValid(employeeMobileNumber, ValidationUtil.MOBILE_NUMBER_REGEX);
 
@@ -328,7 +400,7 @@ public class EmployeeController {
             } else {
                 logger.error("Please enter valid input!!!");
             } 
-        } 
+        } while(!isValid);
         long mobileNo = Long.valueOf(employeeMobileNumber);
         return mobileNo; 
     }

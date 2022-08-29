@@ -1,7 +1,8 @@
 import java.time.LocalDate;
 import java.util.Date;
 
-public class EmployeeDto {  
+public class EmployeeDto { 
+    int id; 
     String name;  
     String email;
     LocalDate dateOfBirth;
@@ -9,7 +10,7 @@ public class EmployeeDto {
     long mobileNumber;
     LocalDate dateOfJoin;
     int batch;
-    public EmployeeDto(String name, String email, String dateOfBirth, String gender,long mobileNumber, String dateOfJoin,int batch) {
+    public EmployeeDto(String name, String email, String dateOfBirth, String gender,long mobileNumber, String dateOfJoin, int batch) {
         this.name = name;
         this.email = email;
         this.dateOfBirth = LocalDate.parse(dateOfBirth);
@@ -20,6 +21,24 @@ public class EmployeeDto {
     }
 
     public EmployeeDto() {
+    }
+    public EmployeeDto(int id, String name, String email, String dateOfBirth, String gender, long mobileNumber, String dateOfJoin, int batch ) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.dateOfBirth = LocalDate.parse(dateOfBirth);
+        this.gender = gender;
+        this.mobileNumber = mobileNumber;
+        this.dateOfJoin = LocalDate.parse(dateOfJoin);
+        this.batch = batch;
+    }
+        
+    public int getId() {
+        return id;
+    } 
+    
+    public void setId() {
+        this.id = id;
     }
         
     public String getName() {  
@@ -78,7 +97,7 @@ public class EmployeeDto {
         return batch;
     }
     public String toString() {
-        return "\n Name: " + name +  "\n Email Id: " + email + "\n Date of birth:" + dateOfBirth +
+        return "Employee Id : " + id + "\n Name: " + name +  "\n Email Id: " + email + "\n Date of birth:" + dateOfBirth +
              "\n Gender:" + gender + "\n Mobile Number:" + mobileNumber + "\n Date od joining:" + dateOfJoin + "\n Batch:" + batch ;
 
     }
