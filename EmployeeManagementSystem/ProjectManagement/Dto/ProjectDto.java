@@ -1,21 +1,22 @@
 import java.time.LocalDate;
-
-public class Project {
+public class ProjectDto {
     int id;
     String name;
     String clientName;
     String companyName;
     LocalDate startDate;
     String projectStatus; 
-
-    public Project(int id, String name, String clientName, String startDate, String projectStatus) {
-        this.id = id;
+    
+   public ProjectDto(String name, String clientName, String companyName, String startDate, String projectStatus) {
         this.name = name;
         this.clientName = clientName;
         this.companyName = companyName;
-        this.startDate = startDate;
+        this.startDate = LocalDate.parse(startDate);
         this.projectStatus = projectStatus;
     } 
+    
+    public ProjectDto() {
+    }
 
     public int getId() {
         return id;
@@ -33,6 +34,14 @@ public class Project {
         this.name = name;  
     }
 
+    public String getClientName() {  
+        return clientName;  
+    }
+
+    public void setClientName(String clientName) {  
+        this.clientName = clientName;  
+    }
+ 
     public String getCompanyName() {  
         return companyName;  
     }
@@ -58,7 +67,7 @@ public class Project {
     }
     
     public String toString() {
-        return "Id: " + id +" \n Project Name: " + name +  "\n Company Name: " + companyName + "\n Starting Date:" + startDate +
+        return "\n Project Name: " + name +  "\n Company Name: " + companyName + "\n Starting Date:" + startDate +
              "\n Project Status:" + projectStatus ;
     }   
 }

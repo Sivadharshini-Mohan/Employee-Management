@@ -1,5 +1,6 @@
 import java.time.LocalDate;
-public class ProjectDto {
+
+public class Project {
     int id;
     String name;
     String clientName;
@@ -7,17 +8,13 @@ public class ProjectDto {
     LocalDate startDate;
     String projectStatus; 
 
-    public ProjectDto(int id, String name, String clientName, String startDate, String projectStatus) {
-        this.id = id;
+    public Project(String name, String clientName, String companyName, String startDate, String projectStatus) {
         this.name = name;
         this.clientName = clientName;
         this.companyName = companyName;
-        this.startDate = startDate;
+        this.startDate = LocalDate.parse(startDate);
         this.projectStatus = projectStatus;
     } 
-    
-    public ProjectDto() {
-    }
 
     public int getId() {
         return id;
@@ -35,6 +32,14 @@ public class ProjectDto {
         this.name = name;  
     }
 
+    public String getClientName() {  
+        return clientName;  
+    }
+
+    public void setClientName(String clientName) {  
+        this.clientName = clientName;  
+    }
+    
     public String getCompanyName() {  
         return companyName;  
     }
@@ -60,7 +65,7 @@ public class ProjectDto {
     }
     
     public String toString() {
-        return "Id: " + id +" \n Project Name: " + name +  "\n Company Name: " + companyName + "\n Starting Date:" + startDate +
+        return "\n Project Name: " + name +  "\n Company Name: " + companyName + "\n Starting Date:" + startDate +
              "\n Project Status:" + projectStatus ;
     }   
 }

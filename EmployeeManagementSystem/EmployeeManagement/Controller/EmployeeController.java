@@ -19,12 +19,6 @@ public class EmployeeController {
     private Scanner scanner = new Scanner(System.in);
     private EmployeeService employeeService = new EmployeeService();
     private ProjectService projectService = new ProjectService();
-
-    public static void main(String[] args) {
-        EmployeeController controller = new EmployeeController();
-        BasicConfigurator.configure(); 
-        controller.choiceSelection();
-    }
     
     /**
      * <p>
@@ -41,7 +35,7 @@ public class EmployeeController {
             
         int userChoice = scanner.nextInt();
           
-        switch(userChoice){
+        switch(userChoice) {
 
             case 1 :
                 try {
@@ -101,14 +95,6 @@ public class EmployeeController {
                 } catch(CustomException exception) {
                     logger.info(exception.getMessage());
                 } 
-                break; 
-            
-            case 8 :
-                try {
-                    projectManagerLogin();
-                } catch(CustomException exception) {
-                    logger.info(exception.getMessage());
-                }
                 break;         
             
             default :
@@ -225,59 +211,6 @@ public class EmployeeController {
         int employeeId = scanner.nextInt();
         logger.info(employeeService.deleteEmployee(employeeId));
     }
-
-    public void projectManagerLogin() {
-        System.out.println("Enter user id :");
-        String userId = scanner.next();
-        System.out.println("Enter you password");
-        String password = scanner.next();
-        projectManangerPortal(userId, password);
-    }
-
-    public void projectManangerPortal(String userId ,String password) {
-        if (userId.equals("manager") && password.equals("ideai2i")) {
-            logger.info("\n press 1 to create new project \n press 2 to update status \n press 3 to display all projects"
-                + " \n press 4 to delete project" );
-            int userChoice = scanner.nextInt();
-        
-            switch(userchoice) {
-                case 1:
-                    createProject();
-                    break;
-
-                 case 2:
-                     logger.info("Enter project name : ");
-                     
-                     break;
-
-                 case 3:
-                     
-                     break;
-   
-                 case 4:
-                     
-                     break;
-             }
-        } else {
-            logger.info("Invalid userId and password");
-        }  
-    }
-
-    public void createProject() {
-        ProjectDto projectDto = new ProjectDto();
-        logger.info("Enter project name: ");
-        projectDto.setName(scanner.next());
-        logger.info("Enter project client name: ");
-        projectDto.setClientName(scanner.next());
-        logger.info("Enter project company name: ");
-        projectDto.setCompanyName(scanner.next());
-        logger.info("Enter project start date: ");
-        projectDto.setStartDate(scanner.next());
-        logger.info("Enter project Status: ");
-        projectDto.setProjectStatus(scanner.next());
-        projectService.addProject(projectDto);     
-    }
-
 
     /**
      * <p>
