@@ -81,4 +81,53 @@ public class ProjectDao extends BaseDao {
             throw new CustomException(exception.getMessage());
         }
     }
+
+    public boolean assingemployees(int projectId, int employeeId, LocalDate startDate, LocalDate relieveDate) throws CustomException {    
+        
+        try {
+            String query = "INSERT INTO employee_project(employee_id, project_id, started_date, relieved_date) values(?, ?, ? ,?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);                        
+            preparedStatement.setInt(1, employeeId);
+            preparedStatement.setInt(2, projectId);
+            preparedStatement.setDate(3, java.sql.Date.valueOf(startDate)); 
+            preparedStatement.setDate(4, java.sql.Date.valueOf(relieveDate));
+            return preparedStatement.execute();
+        } catch (Exception error) {
+            throw new CustomException(error.getMessage());
+        }
+    }
+
+    public List<EmployeeProject> retriveEmployeeProject() throws CustomException {
+            List<EmployeeProject> employeeProjects = new ArrayList<EmployeeProject>(); 
+        try {
+            String query = " select employee_project.*,project.name from employee_project inner join project on "
+                            + "project.id = employee_project.project_id ";
+            preparedStatement = connection.prepareStatement(query);
+            ResultSet resultSet= preparedStatement.executeQuery();
+            while(resultSet.next()){
+                int employeeId = resultSet.getInt("employee_id");
+                int projectId = resultSet.getInt("project_id");
+                String projectName = resultSet.getString("name");
+                String startDate = resultSet.getString("started_date");
+                String relievedDate = resultSet.getString("relieved_date");
+                String status = resultSet.getString("active_status");
+                EmployeeProject employeeProject = new EmployeeProject(employeeId, projectId, projectName, startDate, relievedDate, status);
+                employeeProjects.add(employeeProject);
+            }
+        } catch (Exception exception) {
+            throw new CustomException(exception.getMessage());
+        }
+        return employeeProjects;
+    } 
+
+    public void deleteEmployeeProjectByIds(int projectId, int employeeId) throws CustomException {
+        try{
+            String query = "update employee_project set active_status = 'inactive' where project_id = " + projectId + " and employee_id = " + employeeId ; 
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.execute();
+       } catch (Exception exception) {
+            throw new CustomException(exception.getMessage());
+        }
+    }
+
 }
