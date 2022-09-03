@@ -49,7 +49,7 @@ public class EmployeeController {
         logger.info("\n press 1 to create trainer detail \n press 2 to create trainee detail \n press 3 to create project manager detail "
             + " \n press 4 to display all employees"
             + " \n press 5 to display employee \n press 6 to update employee detail \n press 7 to delete employee detail"
-            + " \n press 8 to project manager portal");
+            + " \n press 8 to project Manager Login portal");
             
         int userChoice = scanner.nextInt();
           
