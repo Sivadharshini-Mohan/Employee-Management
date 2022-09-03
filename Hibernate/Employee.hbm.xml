@@ -1,20 +1,19 @@
-<?xml version='1.0' encoding='utf-8'?>
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate Configuration DTD 3.0//EN" 
 "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
 
 <hibernate-mapping>
-<class name="Employee" table="employee">
-<id name="id" type="int">
+<class name="Employee" table="employee_table">
+<id name="employeeId" type="int">
 <generator class="increment"/>
 </id>
-<property name="name" column = "name" type ="string"/>
-<property name = "email" column = "email_id" type ="string"/>
-<property name = "dateOfBirth" column = "date_of_birth" type ="date"/>
-<property name = "gender" column = "gender" type ="string"/>
-<property name = "mobilNumber" column = "mobile_number" type ="long"/>
-<property name = "dateOfjoin" column = "date_of_join" type ="date"/>
-<property name="batch"/ column = "batch" type ="int"/>
+<property name= "name" column = "name" />
+<property name = "email" column = "email_id" />
+<property name = "dob" column = "date_of_birth" />
+<property name = "gender" column = "gender" />
+<property name = "mobileNumber" column = "mobile_number" />
+<property name = "doj" column = "date_of_join" />
+<property name="batch" column = "batch" />
 </class>
 </hibernate-mapping>
 
