@@ -5,10 +5,29 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import org.hibernate.SessionFactory;
+import org.hibernate.Session;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.Transaction;
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
 
 public class RoleDao extends BaseDao {
     private Connection connection = mysqlConnection();
-    
+    private static SessionFactory factory;
+
+    public  void insertRoleName(List<Role> employeeRole) {
+        factory = new Configuration().configure().buildSessionFactory();
+        Session session = factory.openSession();
+        Transaction transaction = session.beginTransaction();
+        for(Role role : employeeRole) {
+        
+            session.save(role);
+        }
+        transaction.commit();
+        
+    }
+
     public int retriveRoleIdByName(String name) throws CustomException {
         try {
             int roleId = 0;

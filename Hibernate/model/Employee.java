@@ -1,5 +1,7 @@
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.LinkedList;
 
 public class Employee { 
     int employeeId; 
@@ -10,6 +12,7 @@ public class Employee {
     long mobileNumber;
     LocalDate doj;
     int batch;
+    List<Role> roles = new LinkedList<Role>();
     
     public Employee(String name, String email, String dob, String gender, long mobileNumber, String doj, int batch ) {
         this.name = name;
@@ -97,7 +100,15 @@ public class Employee {
     public int getBatch() {
         return batch;
     }
-    
+
+   public List<Role> getRoles() {
+         return roles;
+   }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
+    }	
+
     public String toString() {
         return  "Employee Id : " + employeeId + "\n Name: " + name +  "\n Email Id: " + email + "\n Date of birth:" + dob +
              "\n Gender:" + gender + "\n Mobile Number:" + mobileNumber + "\n Date of joining:" + doj + "\n Batch:" + batch ;

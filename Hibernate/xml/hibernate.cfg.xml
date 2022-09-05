@@ -10,6 +10,7 @@
 <property name="hibernate.connection.url">jdbc:mysql://localhost/hiberdb</property>
 <property name="hibernate.connection.username">root</property>
 <property name="hibernate.connection.password">Shiva@2001</property>
-<mapping resource="Employee.hbm.xml"/>
+<mapping resource = "Employee.hbm.xml" />
+<mapping resource = "Role.hbm.xml" />
 </session-factory>
 </hibernate-configuration>

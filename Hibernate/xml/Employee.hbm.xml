@@ -7,6 +7,10 @@
 <id name="employeeId" type="int">
 <generator class="increment"/>
 </id>
+<bag table="employee_role" name="roles" fetch="select" cascade="all">
+<key column="employee_id"/>
+<many-to-many class="Role" column="role_id"/>
+</bag>
 <property name= "name" column = "name" />
 <property name = "email" column = "email_id" />
 <property name = "dob" column = "date_of_birth" />
