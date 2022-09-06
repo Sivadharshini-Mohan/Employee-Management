@@ -1,49 +1,90 @@
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.LinkedList;
 
-public class Employee { 
-    int employeeId; 
-    String name;  
-    String email;
-    LocalDate dob;
-    String gender;
-    long mobileNumber;
-    LocalDate doj;
-    int batch;
-    List<Role> roles = new LinkedList<Role>();
+import java.time.LocalDate;
+import javax.persistence.Entity;  
+import javax.persistence.Id;  
+import javax.persistence.CascadeType;
+import javax.persistence.Table; 
+import javax.persistence.Column;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.GeneratedValue;
+ 
+@Entity
+@Table(name = "employee")
+public class Employee {
+    @Id 
+    @GeneratedValue
+    @Column(name="id")
+    private int id;
     
-    public Employee(String name, String email, String dob, String gender, long mobileNumber, String doj, int batch ) {
-        this.name = name;
-        this.email = email;
-        this.dob = LocalDate.parse(dob);
-        this.gender = gender;
-        this.mobileNumber = mobileNumber;
-        this.doj = LocalDate.parse(doj);
-        this.batch = batch;
-    }
-    
-    public Employee(int employeeId, String name, String email, String dob, String gender, long mobileNumber, String doj, int batch ) {
-        this.employeeId = employeeId;
-        this.name = name;
-        this.email = email;
-        this.dob = LocalDate.parse(dob);
-        this.gender = gender;
-        this.mobileNumber = mobileNumber;
-        this.doj = LocalDate.parse(doj);
-        this.batch = batch;
-    }
-    
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "email_id")
+    private String email;
+
+
+    @Column(name = "date_of_birth")
+    private LocalDate dateOfBirth;
+
+    @Column(name = "gender")
+    private String gender;
+
+    @Column(name = "mobile_number")
+    private Long mobileNumber;
+
+    @Column(name = "date_of_joning")
+    private LocalDate dateOfJoining;
+
+    @Column(name = "batch")
+    private int batch;
+
+    @Column(name = "role")
+    private String role;
+
+    @ManyToMany(targetEntity = Role.class, cascade = {CascadeType.ALL})
+    @JoinTable(
+        name = "employee_role", 
+        joinColumns = { @JoinColumn(name = "employee_id") }, 
+        inverseJoinColumns = { @JoinColumn(name = "role_id")}
+    )
+    private List<Role> roles = new ArrayList<Role>();
+     
     public Employee() {
     }
-        
-    public int getEmployeeId() {
-        return employeeId;
+    
+    public Employee(String name, String email, String dateOfBirth, String gender, long mobileNumber, String dateOfJoining, int batch, String role ) {
+        this.name = name;
+        this.email = email;
+        this.dateOfBirth = LocalDate.parse(dateOfBirth);
+        this.gender = gender;
+        this.mobileNumber = mobileNumber;
+        this.dateOfJoining = LocalDate.parse(dateOfJoining);
+        this.batch = batch;
+        this.role = role;
+    }
+    
+    public Employee(int id, String name, String email, String dateOfBirth, String gender, long mobileNumber, String dateOfJoining, int batch,String role ) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.dateOfBirth = LocalDate.parse(dateOfBirth);
+        this.gender = gender;
+        this.mobileNumber = mobileNumber;
+        this.dateOfJoining = LocalDate.parse(dateOfJoining);
+        this.batch = batch;
+        this.role = role;
+    }
+
+    public int getid() {
+        return id;
     } 
     
-    public void setEmployeeId(int employeeId) {
-        this.employeeId = employeeId;
+    public void setid(int id) {
+        this.id = id;
     }
     public String getName() {  
         return name;  
@@ -61,12 +102,12 @@ public class Employee {
         this.email = email;  
     }
     
-    public void setDob(LocalDate dob) {
-        this.dob = dob;
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
     
-    public LocalDate getDob() {
-        return dob;
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
     }
 
     public void setGender(String gender) {
@@ -85,12 +126,12 @@ public class Employee {
         return mobileNumber;
     }
 
-    public void setDoj(LocalDate doj) {
-        this.doj = doj;
+    public void setDateOfJoining(LocalDate dateOfJoining) {
+        this.dateOfJoining = dateOfJoining;
     }
     
-    public LocalDate getDoj() {
-        return doj;
+    public LocalDate getDateOfJoining() {
+        return dateOfJoining;
     }
 
     public void setBatch(int batch) {
@@ -100,22 +141,21 @@ public class Employee {
     public int getBatch() {
         return batch;
     }
-
-   public List<Role> getRoles() {
-         return roles;
-   }
-
-    public void setRoles(List<Role> roles) {
-        this.roles = roles;
-    }	
-
-    public String toString() {
-        return  "Employee Id : " + employeeId + "\n Name: " + name +  "\n Email Id: " + email + "\n Date of birth:" + dob +
-             "\n Gender:" + gender + "\n Mobile Number:" + mobileNumber + "\n Date of joining:" + doj + "\n Batch:" + batch ;
-    }
-}
-
-
     
+    public List<Role> getRole() {
+        return roles;
+    }
      
-  
+    public void setRole(List<Role> roles) {
+        this.roles = roles;
+    }
+    
+    public void setEmployeeRole(String role) {
+        this.role = role;
+    }
+    
+    public String getEmployeeRole() {
+        return role;
+    }
+    
+}

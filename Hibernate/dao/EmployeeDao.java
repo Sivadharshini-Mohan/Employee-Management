@@ -11,6 +11,7 @@ import org.hibernate.Session;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.Transaction;
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
 
 /**
  * <p>
@@ -39,29 +40,26 @@ public class EmployeeDao {
             factory = new Configuration().configure().buildSessionFactory();
             Session session = factory.openSession();
             Transaction transaction = session.beginTransaction();
-            session.save(employee);
+            int employeeId = (Integer)session.save(employee);
             transaction.commit();
             System.out.println("Employee added Succesfully");
             session.close();
+            return employeeId;
         } catch (HibernateException hibernateException) {
             System.out.println(hibernateException);
             System.out.println(hibernateException.getMessage());
             hibernateException.printStackTrace();
         }
-       return 1;
+       return 0;
     }
-
-    public List<Employee> retriveEmployeeByRole(int role) {
+    
+    public List<Employee> retriveEmployeeByRole(String role) {
         factory = new Configuration().configure().buildSessionFactory();
         Session session = factory.openSession();
-        return session.createQuery("FROM Employee").list();     
+        return session.createQuery("from Employee where role = " + role).list();    
+                                    
     }
-
-    public List<Employee> retriveEmployeeById(int id) {
-        factory = new Configuration().configure().buildSessionFactory();
-        Session session = factory.openSession();
-        return session.createQuery("FROM Employee where employeeId = " + id).list(); 
-    }
+   
 
 }
 

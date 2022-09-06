@@ -15,44 +15,29 @@ import org.hibernate.Query;
 public class RoleDao extends BaseDao {
     private Connection connection = mysqlConnection();
     private static SessionFactory factory;
-
-    public  void insertRoleName(List<Role> employeeRole) {
+    
+    public void setDefaultRole() {
         factory = new Configuration().configure().buildSessionFactory();
         Session session = factory.openSession();
         Transaction transaction = session.beginTransaction();
-        for(Role role : employeeRole) {
-        
-            session.save(role);
+        Role role = new Role();
+        List<Role> roles = role.getDefaultRoles();
+        for(Role roleList : roles) {
+            session.save(roleList);
         }
         transaction.commit();
-        
+        session.close();
+    }
+    public  void insertRoleName(List<Role> employeeRole) {
+    
     }
 
     public int retriveRoleIdByName(String name) throws CustomException {
-        try {
-            int roleId = 0;
-            String query = "select id from role where name = '" + name + "'" ;
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-            ResultSet rs = preparedStatement.executeQuery(); 
-            while (rs.next()) {
-                roleId = rs.getInt("id");
-                System.out.println(roleId);
-            } 
-            return roleId;
-        } catch(Exception exception) {
-            throw new CustomException(exception.getMessage());
-        }  
-    }
-
-    public boolean assignEmployeeRole(int employeeId, int roleId) throws CustomException {
-        try {
-            String query = " insert into  employee_role (employee_id, role_id) values (?, ? )";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setInt (1, employeeId);
-            preparedStatement.setInt (2, roleId);
-            return preparedStatement.execute();
-        } catch(Exception exception) {
-            throw new CustomException(exception.getMessage());
+        factory = new Configuration().configure().buildSessionFactory();
+        Session session = factory.openSession();
+        Role role = new Role();
+        return role.getId();
+       
         }
-    }
+        
 }

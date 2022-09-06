@@ -3,9 +3,9 @@ enum Gender {
     Female("Female"),
     Others("Others");
     
-  public String gender;
+    public String gender;
 
-    Gender(String gender) {
+    public Gender(String gender) {
         this.gender = gender;
-   }
+    }
 }
