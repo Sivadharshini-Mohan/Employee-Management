@@ -1,15 +1,14 @@
 import org.apache.log4j.*;
 import org.apache.log4j.BasicConfigurator;
-import java.util.Scanner;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.HibernateException;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import java.util.List;
 import java.time.LocalDate;
+import java.util.Scanner;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import org.hibernate.SessionFactory;
-import org.hibernate.Session;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.Transaction;
-import org.hibernate.HibernateException;
 
 /**
  * <p>
@@ -26,12 +25,6 @@ public class EmployeeController {
     private static SessionFactory factory;
     private Role role = new Role();
     public static void main(String[] args) {
-        try {
-            factory = new Configuration().configure().buildSessionFactory();
-        } catch (Exception exception) {
-            System.out.println(exception);
-            exception.printStackTrace();
-        }
         EmployeeController controller = new EmployeeController();
         BasicConfigurator.configure(); 
         controller.choiceSelection();
@@ -47,8 +40,7 @@ public class EmployeeController {
     public void choiceSelection() {
         logger.info("\n press 1 to create trainer detail \n press 2 to create trainee detail \n press 3 to create project manager detail "
             + " \n press 4 to display all employees"
-            + " \n press 5 to display employee \n press 6 to update employee detail \n press 7 to delete employee detail"
-            + " \n press 8 to project manager portal");
+            + " \n press 5 to display employee \n press 6 to update employee detail \n press 7 to delete the employee detail \n press 8 to project manager portal");
             
         int userChoice = scanner.nextInt();
           
@@ -56,7 +48,7 @@ public class EmployeeController {
 
             case 1 :
                 try {
-                    createEmployee(Constants.TRAINER,role.getId());
+                    createEmployee(Constants.TRAINER);
                 } catch(CustomException exception) {
                     logger.info(exception.getMessage());
                 }
@@ -64,7 +56,7 @@ public class EmployeeController {
 
             case 2 :
                 try {
-                    createEmployee(Constants.TRAINEE, role.getId());
+                    createEmployee(Constants.TRAINEE);
                 } catch(CustomException exception) {
                     logger.info(exception.getMessage());
                 }
@@ -72,7 +64,7 @@ public class EmployeeController {
            
             case 3 : 
                 try {
-                    createEmployee(Constants.MANAGER, role.getId());
+                    createEmployee(Constants.MANAGER);
                 } catch(CustomException exception) {
                     logger.info(exception.getMessage());
                 }
@@ -80,19 +72,20 @@ public class EmployeeController {
 
             case 4 :
                 try {
-                    logger.info("\n Select role: \n press 1 for trainer \n press 2 for trainee");
-                    displayEmployees(roleOption());
+                    displayEmployees();
                 } catch(CustomException exception) {
                     logger.info(exception.getMessage());
                 }
                 break;
 
             case 5 :
-                
+                try {
                     logger.info(" Enter employee id which employee detail you want to show: ");
                     int employeeId = scanner.nextInt();
-                    //displayEmployee(employeeId);
-                
+                    displayEmployeeById(employeeId);
+                } catch(CustomException exception) {
+                    logger.info(exception.getMessage());
+                }
                 break;
             
             case 6 :
@@ -102,15 +95,14 @@ public class EmployeeController {
                     logger.info(exception.getMessage());
                 } 
                 break;
-
-           case 7 :
-               try {
+            case 7:
+                try {
                     deleteEmployee();
                 } catch(CustomException exception) {
                     logger.info(exception.getMessage());
                 } 
-                break; 
-            
+                break;
+
             case 8 :
                 try {
                     projectManagerLogin();
@@ -132,36 +124,43 @@ public class EmployeeController {
      * @throws CustomException 
      * @return {@link void} return nothing
      */     
-    public void createEmployee(String employeeRole, int role) throws CustomException {
+    public void createEmployee(String employeeRole) throws CustomException {
         try {	
-            Employee employee = new Employee();
+            EmployeeDto employeeDto = new EmployeeDto();
             logger.info("Enter the employee name : ");
-            employee.setName(nameValidation());  
+            employeeDto.setName(nameValidation());  
             logger.info("Enter the employee Email id ");
-            employee.setEmail(emailValidation()); 
+            employeeDto.setEmailId(emailValidation()); 
             logger.info("Enter the employee dob ");
-            employee.setDateOfBirth(dateValidation()); 
+            employeeDto.setDateOfBirth(dateValidation()); 
             logger.info(" Enter employee gender: \n press 1 to Male \n press 2 to Female \n press 3 to Others");
-            employee.setGender(genderOption()); 
+            employeeDto.setGender(genderOption()); 
             logger.info("Enter employee mobileNumber");
-            employee.setMobileNumber(mobileNumberValidation());
-            logger.info("Enter the employee date of joining ");
-            employee.setDateOfJoining(dateValidation()); 
+            employeeDto.setMobileNumber(mobileNumberValidation());
+            logger.info("Enter the employee date of joining");
+            employeeDto.setDateOfJoining(dateValidation()); 
             logger.info("Enter the employee batch ");
             int batch = scanner.nextInt();
-            employee.setBatch(batch); 
-            employee.setEmployeeRole(employeeRole);
-            logger.info(employeeService.addEmployeeByRole(employee, employeeRole));
+            employeeDto.setBatch(batch); 
+            logger.info("Enter the new role");
+            String role = scanner.next();
+            logger.info(employeeService.addEmployeeByRole(employeeDto, role));
         } catch (CustomException exception) {
             throw new CustomException(exception.getMessage());
         }     
     } 
 
-    public void displayEmployees(String employeeRole) throws CustomException {
-        List<Employee> employees = employeeService.getEmployeesByRole(employeeRole);
-            for(Employee employee : employees) {
+    public void displayEmployees() throws CustomException {
+        List<EmployeeDto> employees = employeeService.getEmployees();
+            for(EmployeeDto employee : employees) {
                 logger.info(employee);
             }
+    }
+
+    public void displayEmployeeById(int id) throws CustomException {
+        EmployeeDto employeeDto = employeeService.getEmployeeById(id);
+        logger.info(employeeService.getEmployeeById(id));
+        logger.info(employeeDto);
     }
 
     /**
@@ -176,44 +175,35 @@ public class EmployeeController {
     public void updateEmployee() throws CustomException {
         logger.info("Enter employee id which employee detail you want to modify :");
         int employeeId = scanner.nextInt();
-        Employee employee = new Employee();
+        EmployeeDto employeeDto = new EmployeeDto();
         logger.info("Enter new employee name : ");
-        employee.setName(nameValidation());  
+        employeeDto.setName(nameValidation());  
         logger.info("Enter new employee Email id ");
-        employee.setEmail(emailValidation()); 
+        employeeDto.setEmailId(emailValidation()); 
         logger.info("Enter new employee dob, Required Format is d/M/yyyy : ");
-        employee.setDateOfBirth(dateValidation()); 
+        employeeDto.setDateOfBirth(dateValidation()); 
         logger.info("Enter new employee gender : \n press 1 to Male \n press 2 to Female \n press 3 to Others");
-        String gender = scanner.next();
-        employee.setGender(gender); 
+        employeeDto.setGender(genderOption()); 
         logger.info("Enter new employee mobileNumber");
-        employee.setMobileNumber(mobileNumberValidation());
+        employeeDto.setMobileNumber(mobileNumberValidation());
         logger.info("Enter new employee date of joining, Required Format is d/M/yyyy : ");
-        employee.setDateOfJoining(dateValidation()); 
+        employeeDto.setDateOfJoining(dateValidation()); 
         logger.info("Enter new employee batch ");
         int batch = scanner.nextInt();
-        employee.setBatch(batch); 
-        logger.info(employeeService.updateEmployee(employee, employeeId));
+        employeeDto.setBatch(batch);
+        logger.info("Enter new role");
+        String role = scanner.next(); 
+        logger.info(employeeService.updateEmployee(employeeDto, employeeId, role));
     }
-
-    /**
-     * <p>
-     * Delete employee detail  
-     * </p>
-     * @throws CustomException 
-     * @return {@link void} return nothing 
-     *
-     */     
     public void deleteEmployee() throws CustomException {
-        logger.info("Enter employee id which employee data you want to delete :");
+        logger.info("Enter the employee id which employee you want to delete :");
         int employeeId = scanner.nextInt();
-        logger.info(employeeService.deleteEmployee(employeeId));
+        logger.info(employeeService.deleteEmployeeById(employeeId));
     }
-
     public void projectManagerLogin() throws CustomException {
-        System.out.println("Enter user id :");
+        logger.info("Enter user id :");
         String userId = scanner.next();
-        System.out.println("Enter you password");
+        logger.info("Enter you password");
         String password = scanner.next();
         
     }
@@ -226,7 +216,7 @@ public class EmployeeController {
      */
     public String nameValidation() {
         String name = null;
-         boolean isValid = false;         
+        boolean isValid = false;         
          do {
             String employeeName = scanner.next();
             isValid = ValidationUtil.isValid(employeeName, ValidationUtil.NAME_REGEX);
@@ -282,7 +272,7 @@ public class EmployeeController {
 		isValid = true;
                 return date;
 	    } catch (DateTimeParseException e) {
-		System.out.println("Invalid Date Format");
+		logger.error("Invalid Date Format");
 	    }
         } while(!isValid);
         return null;

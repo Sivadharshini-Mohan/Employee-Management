@@ -10,10 +10,11 @@ import java.util.Scanner;
  * @author Sivadharshini Mohan
  * @version 1.0
  **/
-public class EmployeeService {             
+public class EmployeeService {          
+    private EmployeeMapper employeeMapper = new EmployeeMapper();   
     private EmployeeDao employeeDao = new EmployeeDao();
+    private EmployeeDto employeedto = new EmployeeDto();
     private RoleDao roleDao = new RoleDao();
-    private EmployeeMapper employeeMapper = new EmployeeMapper();
 
     /**  
      * <p>  
@@ -25,48 +26,26 @@ public class EmployeeService {
      * 
      * @return {@link String}
      */
-    public String addEmployeeByRole(EmployeeDto employeeDto, String role) throws CustomException {
+    public String addEmployeeByRole(EmployeeDto employeeDto, String employeeRole) throws CustomException {
+        Role role = roleDao.retrieveRoleByName(employeeRole);
         Employee employee = employeeMapper.employeeDtoToEmployee(employeeDto);
+        //employee.setRoles(role);
         int employeeId = employeeDao.insertEmployee(employee);
-        int roleId = roleDao.retriveRoleIdByName(role);
-        roleDao.assignEmployeeRole(employeeId, roleId);
         return "Employee detail create sucessfully";    
     }
-    
-    /**
-     * <p>
-     * Get the all employee detail
-     * </p> 
-     *  
-     * @param employeeRole Trainer/Trainee
-     * @return {@link List} return Object
-     */
-    public List<EmployeeDto> getEmployeesByRole(int employeeRole) throws CustomException  {
-        List<Employee> employees =  employeeDao.retriveEmployeeByRole(employeeRole);
-        List<EmployeeDto> employeeDtoList =  new ArrayList<EmployeeDto>();
-        for(Employee employee : employees) {
-            EmployeeDto employeeDto = employeeMapper.employeeToEmployeeDto(employee);
-            employeeDtoList.add(employeeDto);
+
+   public List<EmployeeDto> getEmployees() throws CustomException  {
+        List<EmployeeDto> employeeDtoList = null;
+        for(Employee employee: employeeDao.retriveEmployees()) {          
+             employeeDtoList.add(employeeMapper.employeeToEmployeeDto(employee));
         }
         return employeeDtoList; 
     }
-    
-    /**
-     * <p>
-     * Get the particular employee detail
-     * </p> 
-     *  
-     * @param employeeId 
-     * @return {@link List} return Object
-     */
-    public List<EmployeeDto> getEmployeeById(int employeeId) throws CustomException  {
-        List<Employee> employees =  employeeDao.retriveEmployeeById(employeeId);
-        List<EmployeeDto> employeeDtoList =  new ArrayList<EmployeeDto>();
-        for(Employee employee : employees) {
-            EmployeeDto employeeDto = employeeMapper.employeeToEmployeeDto(employee);
-            employeeDtoList.add(employeeDto);
-        }
-        return employeeDtoList;
+
+    public EmployeeDto getEmployeeById(int id) throws CustomException {
+        Employee employee = employeeDao.retrieveEmployeeById(id);
+        EmployeeDto employeeDto = employeeMapper.employeeToEmployeeDto(employee);
+        return employeeDto;
     }
 
     /**
@@ -78,22 +57,23 @@ public class EmployeeService {
      * @param email
      * @return {@link String} 
      */
-    public String updateEmployee(EmployeeDto employeeDto, int id) throws CustomException {
-        //Employee employee = employeeMapper.employeeDtoToEmployee(employeeDto);
-        //employeeDao.updateEmployeeById(employee, id);
+    public String updateEmployee(EmployeeDto employeeDto, int employeeId, String role) throws CustomException {
+        Employee employee = employeeMapper.employeeDtoToEmployee(employeeDto);
+        Employee updateEmployee = employeeDao.retrieveEmployeeById(employeeId);
+        List<Role> roles = updateEmployee.getRoles();
+        Role newRole = roleDao.retrieveRoleByName(role);
+        roles.add(newRole);
+        employee.setRoles(roles);
+        employee.setId(employeeId);
+        employeeDao.updateEmployeeById(employee);
         return "Employee detail updated sucessfully";
     } 
-    
-    /**
-     * <p>
-     * Delete the employee detail 
-     * </p> 
-     *  
-     * @param email
-     * @return {@link String} 
-     */
-    public String deleteEmployee(int id) throws CustomException {
-       // employeeDao.deleteEmployeeById(id);
-        return "Employee deleted sucessfully";
+    public String deleteEmployeeById(int id) throws CustomException {
+        List<Role> roles = new ArrayList<Role>();
+        Employee employee = employeeDao.retrieveEmployeeById(id);
+        employee.setStatus("inactive");
+        employee.setRoles(roles);
+        employeeDao.deleteEmployee(employee);
+        return "Employee Detail deleted successfully";
     }
 }

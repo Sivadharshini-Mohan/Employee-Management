@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.List;
-
 import java.time.LocalDate;
 import javax.persistence.Entity;  
 import javax.persistence.Id;  
@@ -11,6 +10,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.JoinColumn;
 import javax.persistence.GeneratedValue;
+import javax.persistence.*;
  
 @Entity
 @Table(name = "employee")
@@ -42,10 +42,10 @@ public class Employee {
     @Column(name = "batch")
     private int batch;
 
-    @Column(name = "role")
-    private String role;
+    @Column(name = "status")
+    private String status;
 
-    @ManyToMany(targetEntity = Role.class, cascade = {CascadeType.ALL})
+    @ManyToMany( fetch = FetchType.EAGER)
     @JoinTable(
         name = "employee_role", 
         joinColumns = { @JoinColumn(name = "employee_id") }, 
@@ -56,7 +56,7 @@ public class Employee {
     public Employee() {
     }
     
-    public Employee(String name, String email, String dateOfBirth, String gender, long mobileNumber, String dateOfJoining, int batch, String role ) {
+    public Employee(String name, String email, String dateOfBirth, String gender, long mobileNumber, String dateOfJoining, int batch, String status) {
         this.name = name;
         this.email = email;
         this.dateOfBirth = LocalDate.parse(dateOfBirth);
@@ -64,10 +64,10 @@ public class Employee {
         this.mobileNumber = mobileNumber;
         this.dateOfJoining = LocalDate.parse(dateOfJoining);
         this.batch = batch;
-        this.role = role;
+        this.status = status;
     }
     
-    public Employee(int id, String name, String email, String dateOfBirth, String gender, long mobileNumber, String dateOfJoining, int batch,String role ) {
+    public Employee(int id, String name, String email, String dateOfBirth, String gender, long mobileNumber, String dateOfJoining, int batch, String status) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -76,14 +76,14 @@ public class Employee {
         this.mobileNumber = mobileNumber;
         this.dateOfJoining = LocalDate.parse(dateOfJoining);
         this.batch = batch;
-        this.role = role;
+        this.status = status;
     }
 
-    public int getid() {
+    public int getId() {
         return id;
     } 
     
-    public void setid(int id) {
+    public void setId(int id) {
         this.id = id;
     }
     public String getName() {  
@@ -141,21 +141,23 @@ public class Employee {
     public int getBatch() {
         return batch;
     }
+    public void setStatus(String status) {
+        this.batch = batch;
+    }
     
-    public List<Role> getRole() {
+    public String getStatus() {
+        return status;
+    }
+    public List<Role> getRoles() {
         return roles;
     }
-     
-    public void setRole(List<Role> roles) {
+    
+    public void setRoles(List<Role> roles) {
         this.roles = roles;
     }
-    
-    public void setEmployeeRole(String role) {
-        this.role = role;
-    }
-    
-    public String getEmployeeRole() {
-        return role;
-    }
-    
+
+    public String toString() {
+        return  "Employee Id : " + id + "\n Name: " + name +  "\n Email Id: " + email + "\n Date of birth:" + dateOfBirth +
+             "\n Gender:" + gender + "\n Mobile Number:" + mobileNumber + "\n Date of joining:" + dateOfJoining + "\n Batch:" + batch + "\n Roles : " + roles ;
+    } 
 }
