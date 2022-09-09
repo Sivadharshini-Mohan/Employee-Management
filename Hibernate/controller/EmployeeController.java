@@ -205,7 +205,8 @@ public class EmployeeController {
         String userId = scanner.next();
         logger.info("Enter you password");
         String password = scanner.next();
-        
+        ProjectController projectController = new ProjectController();
+        projectController.projectManangerPortal(userId, password);
     }
 
     /**

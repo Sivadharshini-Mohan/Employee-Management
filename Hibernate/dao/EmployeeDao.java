@@ -37,7 +37,7 @@ public class EmployeeDao extends BaseDao {
      * @throws CustomException
      * @return {@link int}
      */
-    public int insertEmployee(Employee employee) {
+    public int insertEmployee(Employee employee) throws CustomException {
 
         try {
             session = factory.openSession();
