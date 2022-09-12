@@ -1,17 +1,24 @@
+package com.i2i.annotation.model;
+
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.time.LocalDate;
-import javax.persistence.Entity;  
-import javax.persistence.Id;  
 import javax.persistence.CascadeType;
-import javax.persistence.Table; 
 import javax.persistence.Column;
+import javax.persistence.Entity;  
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;  
+import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.JoinColumn;
-import javax.persistence.GeneratedValue;
-import javax.persistence.*;
- 
+import javax.persistence.OneToMany;
+import javax.persistence.Table; 
+import java.sql.Timestamp; 
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 @Entity
 @Table(name = "employee")
 public class Employee {
@@ -45,18 +52,30 @@ public class Employee {
     @Column(name = "status")
     private String status;
 
-    @ManyToMany( fetch = FetchType.EAGER)
+    @CreationTimestamp
+    @ColumnDefault("CURRENT_TIMESTAMP")
+    private Timestamp createdDate;
+
+    @UpdateTimestamp
+    @ColumnDefault("CURRENT_TIMESTAMP")
+    private Timestamp updatedDate;
+
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "employee_role", 
         joinColumns = { @JoinColumn(name = "employee_id") }, 
         inverseJoinColumns = { @JoinColumn(name = "role_id")}
     )
     private List<Role> roles = new ArrayList<Role>();
+
+    @OneToMany(mappedBy = "employee", fetch = FetchType.LAZY)
+    List<EmployeeProject> employeeProjects = new ArrayList<EmployeeProject>();
      
     public Employee() {
     }
     
-    public Employee(String name, String email, String dateOfBirth, String gender, long mobileNumber, String dateOfJoining, int batch, String status) {
+    public Employee(String name, String email, String dateOfBirth, String gender, long mobileNumber, String dateOfJoining, 
+                    int batch, String status) {
         this.name = name;
         this.email = email;
         this.dateOfBirth = LocalDate.parse(dateOfBirth);
@@ -67,7 +86,8 @@ public class Employee {
         this.status = status;
     }
     
-    public Employee(int id, String name, String email, String dateOfBirth, String gender, long mobileNumber, String dateOfJoining, int batch, String status) {
+    public Employee(int id, String name, String email, String dateOfBirth, String gender, long mobileNumber, String dateOfJoining, 
+                    int batch , String status) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -154,6 +174,14 @@ public class Employee {
     
     public void setRoles(List<Role> roles) {
         this.roles = roles;
+    }
+
+    public List<EmployeeProject> getEmployeeProjects() {
+        return employeeProjects;
+    }
+    
+    public void setEmployeeProjects(List<EmployeeProject> employeeProjects) {
+        this.employeeProjects = employeeProjects;
     }
 
     public String toString() {

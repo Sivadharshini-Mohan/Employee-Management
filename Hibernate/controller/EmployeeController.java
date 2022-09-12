@@ -1,14 +1,22 @@
-import org.apache.log4j.*;
+package com.i2i.annotation.controller;
+
+import com.i2i.annotation.common.CustomException;
+import com.i2i.annotation.common.ValidationUtil;
+import com.i2i.annotation.dto.EmployeeDto;
+import com.i2i.annotation.model.Role;
+import com.i2i.annotation.service.EmployeeService;
+
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Scanner;
+import org.apache.log4j.Logger;
 import org.apache.log4j.BasicConfigurator;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import java.util.List;
-import java.time.LocalDate;
-import java.util.Scanner;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 
 /**
  * <p>
@@ -41,9 +49,12 @@ public class EmployeeController {
         logger.info("\n press 1 to create trainer detail \n press 2 to create trainee detail \n press 3 to create project manager detail "
             + " \n press 4 to display all employees"
             + " \n press 5 to display employee \n press 6 to update employee detail \n press 7 to delete the employee detail \n press 8 to project manager portal");
-            
-        int userChoice = scanner.nextInt();
-          
+        if(scanner.hasNextInt()) {
+            int userChoice= scanner.nextInt();
+        } else {
+            logger.error("Please enter valid input");
+        }
+        
         switch(userChoice) {
 
             case 1 :
@@ -95,7 +106,8 @@ public class EmployeeController {
                     logger.info(exception.getMessage());
                 } 
                 break;
-            case 7:
+
+            case 7 :
                 try {
                     deleteEmployee();
                 } catch(CustomException exception) {
@@ -142,9 +154,7 @@ public class EmployeeController {
             logger.info("Enter the employee batch ");
             int batch = scanner.nextInt();
             employeeDto.setBatch(batch); 
-            logger.info("Enter the new role");
-            String role = scanner.next();
-            logger.info(employeeService.addEmployeeByRole(employeeDto, role));
+            logger.info(employeeService.addEmployeeByRole(employeeDto, employeeRole));
         } catch (CustomException exception) {
             throw new CustomException(exception.getMessage());
         }     
@@ -152,9 +162,9 @@ public class EmployeeController {
 
     public void displayEmployees() throws CustomException {
         List<EmployeeDto> employees = employeeService.getEmployees();
-            for(EmployeeDto employee : employees) {
-                logger.info(employee);
-            }
+        for(EmployeeDto employee: employees) {
+            logger.info(employee);
+        }
     }
 
     public void displayEmployeeById(int id) throws CustomException {
@@ -195,11 +205,13 @@ public class EmployeeController {
         String role = scanner.next(); 
         logger.info(employeeService.updateEmployee(employeeDto, employeeId, role));
     }
+
     public void deleteEmployee() throws CustomException {
         logger.info("Enter the employee id which employee you want to delete :");
         int employeeId = scanner.nextInt();
         logger.info(employeeService.deleteEmployeeById(employeeId));
     }
+
     public void projectManagerLogin() throws CustomException {
         logger.info("Enter user id :");
         String userId = scanner.next();
@@ -218,7 +230,7 @@ public class EmployeeController {
     public String nameValidation() {
         String name = null;
         boolean isValid = false;         
-         do {
+        do {
             String employeeName = scanner.next();
             isValid = ValidationUtil.isValid(employeeName, ValidationUtil.NAME_REGEX);
 
@@ -228,6 +240,7 @@ public class EmployeeController {
             } else {
                 logger.error("Please enter valid input!!!");
             } 
+
         } while(!isValid);
         return name;
     }
@@ -251,11 +264,12 @@ public class EmployeeController {
             } else {
                 logger.error("Please enter valid input!!!");
             } 
+
         } while(!isValid);
         return emailId;
     }
 
-     /**
+    /**
      * <p>
      * This method is used to validate the date. 
      * </p>  
@@ -279,7 +293,7 @@ public class EmployeeController {
         return null;
     }
     
-     /**
+    /**
      * <p>
      * This method is used to select the gender option by using enum
      * </p>  
@@ -292,59 +306,32 @@ public class EmployeeController {
             String employeeGender = scanner.next();
 
             switch(employeeGender) {
-                case "1":
+
+                case "1" :
                     gender = Gender.Male.gender;
                     break;
 
-                case "2":
+                case "2" :
                     gender = Gender.Female.gender;
                     break;
 
-                case "3":
+                case "3" :
                     gender = Gender.Others.gender;
                     break;
 
-                default:
-                    return "Invalid Option";
-                           
+                default :
+                    return "Invalid Option";                           
             }
         } while(!isValid);
         return gender;
     }  
 
-    public String roleOption() {
-        String role = null;
-        boolean isValid = true;
-        do {
-            String employeeRole = scanner.next();
-
-            switch(employeeRole) {
-                case "1":
-                    role = Roles.Trainer.role;
-                    break;
-
-                case "2":
-                    role = Roles.Trainee.role;
-                    break;
-
-                case "3":
-                    role = Roles.Manager.role;
-                    break;
-
-                default:
-                    return "Invalid Option";
-                           
-            }
-        } while(!isValid);
-        return role;
-    }  
-
-    /**
-     * <p>
-     * This method is used to validate employee mobile number
-     * </p>  
-     * @return {@link long} return valid mobile number
-     */
+   /**
+    * <p>
+    * This method is used to validate employee mobile number
+    * </p>  
+    * @return {@link long} return valid mobile number
+    */
     public long mobileNumberValidation() {
         String employeeMobileNumber;
         boolean isValid = false;
@@ -357,6 +344,7 @@ public class EmployeeController {
             } else {
                 logger.error("Please enter valid input!!!");
             } 
+
         } while(!isValid);
         long mobileNo = Long.valueOf(employeeMobileNumber);
         return mobileNo; 
