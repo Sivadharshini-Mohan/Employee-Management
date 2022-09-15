@@ -1,11 +1,23 @@
-import javax.persistence.*; 
-import javax.persistence.Column; 
+package com.i2i.annotation.model;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;  
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;  
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table; 
-import java.time.LocalDate; 
-import java.util.List;
-import java.util.ArrayList;
+import java.sql.Timestamp; 
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Table(name = "project")
@@ -31,6 +43,14 @@ public class Project {
     @Column(name = "project_status")
     String projectStatus;
     
+    @CreationTimestamp
+    @ColumnDefault("CURRENT_TIMESTAMP")
+    private Timestamp createdDate;
+
+    @UpdateTimestamp
+    @ColumnDefault("CURRENT_TIMESTAMP")
+    private Timestamp updatedDate;
+
     @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
     List<EmployeeProject> employeeProjects = new ArrayList<EmployeeProject>();
 
@@ -43,13 +63,14 @@ public class Project {
     } 
     
     public Project () {
+
     }
 
     public int getId() {
         return id;
     } 
     
-    public void setId() {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -103,6 +124,6 @@ public class Project {
     
     public String toString() {
         return "\n Project Name: " + name +  "\n Company Name: " + companyName + "\n Starting Date:" + startDate +
-             "\n Project Status:" + projectStatus ;
+               "\n Project Status:" + projectStatus ;
     }   
 }

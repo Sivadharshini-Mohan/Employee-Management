@@ -10,9 +10,9 @@
         <property name="hibernate.connection.password">Shiva@2001</property>
         <property name="show_sql">true</property>
         <property name="format_sql">true</property>
-        <mapping class = "Employee"/>
-        <mapping class = "Role"/>
-        <mapping class = "Project"/>
-        <mapping class = "EmployeeProject"/>
+        <mapping class = "com.i2i.annotation.model.Employee"/>
+        <mapping class = "com.i2i.annotation.model.Role"/>
+        <mapping class = "com.i2i.annotation.model.Project"/>
+        <mapping class = "com.i2i.annotation.model.EmployeeProject"/>
     </session-factory>
 </hibernate-configuration>

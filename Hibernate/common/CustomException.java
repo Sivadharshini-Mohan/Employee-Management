@@ -1,9 +1,13 @@
+package com.i2i.annotation.common;
+
 import java.lang.RuntimeException;
 
 public class CustomException extends Exception {
+
     public CustomException () {
         super();
     }
+
     public CustomException (String message) {
         super(message);
     }

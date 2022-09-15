@@ -1,3 +1,10 @@
+package com.i2i.annotation.dao;
+
+import com.i2i.annotation.common.CustomException;
+import com.i2i.annotation.dao.BaseDao;
+import com.i2i.annotation.model.Employee;
+import com.i2i.annotation.model.Role;
+
 import org.hibernate.cfg.Configuration;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
@@ -12,16 +19,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.List;  
 
-public class RoleDao extends BaseDao {
-    private Connection connection = mysqlConnection();
-    private static SessionFactory factory;    
+public class RoleDao{
+    private static SessionFactory factory = BaseDao.getInstance();
+    Session session = null;    
 
-    public void setDefaultRole() throws CustomException {  
+    public void setDefaultRole(){  
         try {
-            factory = new Configuration().configure().buildSessionFactory();
-            Session session = factory.openSession();
+            session = factory.openSession();
             Transaction transaction = session.beginTransaction();
             Role role = new Role();
             List<Role> roles = role.getDefaultRoles();
@@ -32,14 +38,13 @@ public class RoleDao extends BaseDao {
             session.close();
         } catch(Exception exception) {
             exception.printStackTrace(); 
-            throw new CustomException(exception.getMessage()); 
+           
         }   
     }
 
     public Role retrieveRoleByName(String name) throws CustomException {
         try {
-            factory = new Configuration().configure().buildSessionFactory();
-            Session session = factory.openSession(); 
+            session = factory.openSession(); 
             Criteria criteria = session.createCriteria(Role.class);
             criteria.add(Restrictions.eq("name", name));
             Role role = (Role) criteria.uniqueResult();

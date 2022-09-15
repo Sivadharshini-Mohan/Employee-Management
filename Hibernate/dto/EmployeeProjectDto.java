@@ -1,12 +1,17 @@
+package com.i2i.annotation.dto;
+
+import com.i2i.annotation.model.Employee;
+import com.i2i.annotation.model.Project;
+
 import java.time.LocalDate;
 
 public class EmployeeProjectDto {
-    String projectName;
-    LocalDate startDate;
-    LocalDate relievedDate;
-    String activeStatus;
-    Employee employee;
-    Project project;
+    private String projectName;
+    private LocalDate startDate;
+    private LocalDate relievedDate;
+    private String activeStatus;
+    private Employee employee;
+    private Project project;
     
     public EmployeeProjectDto(String projectName, String startDate, String relievedDate, String activeStatus, 
                                Employee employee, Project project) {
@@ -19,7 +24,9 @@ public class EmployeeProjectDto {
     }
     
     public EmployeeProjectDto() {
+
     }
+
     public String getProjectName() {
         return projectName;
     } 
@@ -67,8 +74,9 @@ public class EmployeeProjectDto {
     public void setProject(Project project) {
         this.project = project;
     }
+
     public String toString() {
-        return  " \n Project Name : " + projectName + "\n Start Date : " + startDate + "\n Relieved Date:" + relievedDate +
-                "\n Active Status:" + activeStatus ;
+        return  " \n Project Name : " + projectName + "\n Start Date : " + startDate + "\n Relieved Date:" + relievedDate
+                + "\n Active Status:" + activeStatus ;
     }
 }

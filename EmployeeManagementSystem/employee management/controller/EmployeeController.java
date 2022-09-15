@@ -4,7 +4,7 @@ import com.Employee-Management.EmployeeManagement.project management.service.Emp
 import com.Employee-Management.EmployeeManagement.project management.common.Constants;
 import com.Employee-Management.EmployeeManagement.project management.common.Validation
 
-import org.apache.log4j.*;
+import org.apache.log4j.Logger;
 import org.apache.log4j.BasicConfigurator;
 import java.util.Scanner;
 import java.util.List;

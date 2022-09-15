@@ -1,15 +1,28 @@
-import javax.persistence.*; 
-import javax.persistence.Column; 
+package com.i2i.annotation.model;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;  
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;  
-import javax.persistence.Table;
-import java.time.LocalDate;  
-import java.util.List;
-import java.util.ArrayList;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table; 
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Table(name = "employee_project")
 public class EmployeeProject {
+
     @Id 
     @GeneratedValue
     @Column(name="id")
@@ -42,6 +55,9 @@ public class EmployeeProject {
         this.activeStatus = activeStatus;
         this.employee = employee;
         this.project = project;
+    }
+
+    public EmployeeProject() {
     }
 
     public String getProjectName() {

@@ -1,5 +1,6 @@
 package com.i2i.annotation.model;
 
+import java.sql.Timestamp; 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +15,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table; 
-import java.sql.Timestamp; 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -72,6 +72,7 @@ public class Employee {
     List<EmployeeProject> employeeProjects = new ArrayList<EmployeeProject>();
      
     public Employee() {
+
     }
     
     public Employee(String name, String email, String dateOfBirth, String gender, long mobileNumber, String dateOfJoining, 
