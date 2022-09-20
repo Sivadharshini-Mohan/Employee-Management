@@ -58,6 +58,7 @@ public class EmployeeProject {
     }
 
     public EmployeeProject() {
+
     }
 
     public String getProjectName() {

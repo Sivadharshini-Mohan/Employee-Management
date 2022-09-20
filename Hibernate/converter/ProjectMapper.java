@@ -7,10 +7,11 @@ import com.i2i.annotation.model.Project;
 
 /**
  * <p>
- * It helps to convert the model data to dto vice versa
+ * It helps to convert the model data to dto and vice versa
  * </p>
  **/
 public class ProjectMapper {   
+
     public Project fromProjectDto(ProjectDto projectDto) {
         Project project = new Project(projectDto.getName(), projectDto.getClientName(), 
                                       projectDto.getCompanyName(), projectDto.getStartDate().toString(), projectDto.getProjectStatus()); 

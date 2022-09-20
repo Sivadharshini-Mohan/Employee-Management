@@ -221,7 +221,7 @@ public class EmployeeController {
             int employeeId = scanner.nextInt();
             logger.info(employeeService.deleteEmployeeById(employeeId));
         } catch(CustomException exception) {
-                    logger.info(exception.getMessage());
+            logger.info(exception.getMessage());
         }
     }
 

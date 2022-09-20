@@ -14,7 +14,7 @@ public class EmployeeProjectDto {
     private Project project;
     
     public EmployeeProjectDto(String projectName, String startDate, String relievedDate, String activeStatus, 
-                               Employee employee, Project project) {
+                              Employee employee, Project project) {
         this.projectName = projectName;
         this.startDate = LocalDate.parse(startDate); 
         this.relievedDate = LocalDate.parse(relievedDate);
@@ -76,7 +76,7 @@ public class EmployeeProjectDto {
     }
 
     public String toString() {
-        return  " \n Project Name : " + projectName + "\n Start Date : " + startDate + "\n Relieved Date:" + relievedDate
-                + "\n Active Status:" + activeStatus ;
+        return  " \n Project Name : " + projectName + "\n Start Date : " + startDate + "\n Relieved Date:" + relievedDate +
+                "\n Active Status:" + activeStatus ;
     }
 }

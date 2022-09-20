@@ -4,9 +4,6 @@ import com.i2i.annotation.common.CustomException;
 import com.i2i.annotation.dao.BaseDao;
 import com.i2i.annotation.model.Employee;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;

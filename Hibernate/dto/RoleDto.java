@@ -11,6 +11,7 @@ public class RoleDto {
     private List<Employee> employees = new ArrayList<Employee>();
     
     public RoleDto() {
+
     }
    
     public RoleDto(String name) { 

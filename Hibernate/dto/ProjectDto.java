@@ -72,6 +72,6 @@ public class ProjectDto {
     
     public String toString() {
         return "\n Project Name: " + name +  "\n Company Name: " + companyName + "\n Starting Date:" + startDate +
-             "\n Project Status:" + projectStatus ;
+               "\n Project Status:" + projectStatus ;
     }   
 }

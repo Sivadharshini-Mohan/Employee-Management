@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 
 /**
  * <p> 
- * validate all the input get from the user
+ * Validate all the input get from the user
  * </p>
  */
 public class ValidationUtil {
@@ -31,7 +31,7 @@ public class ValidationUtil {
 
     /**
      * <p> 
-     * calculate the age of Employee
+     * Calculate the age of Employee
      * </p.
      *
      */

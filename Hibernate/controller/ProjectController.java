@@ -31,7 +31,7 @@ public class ProjectController {
     private Scanner scanner = new Scanner(System.in);
     private static Logger logger = Logger.getLogger(ProjectController.class);
 
-     /**
+    /**
      * <p>
      * It shows the option to Add, Update, Delete,  
      * Display project
@@ -93,8 +93,11 @@ public class ProjectController {
                         deleteProject();
                     } catch(CustomException exception) {
                         logger.info(exception.getMessage());
-                    }    
-             }
+                    } 
+                default :
+                    logger.info("Invalid input, Please try again later");  
+              
+            }
         } else {
             logger.info("Invalid userId and password");
         }  

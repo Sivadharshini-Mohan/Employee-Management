@@ -80,7 +80,8 @@ public class EmployeeService {
      * </p> 
      *  
      * @param employeeDto
-     * @param email
+     * @param employeeId
+     * @param role
      * @return {@link String} 
      */
     public String updateEmployee(EmployeeDto employeeDto, int employeeId, String role) throws CustomException {
@@ -101,7 +102,7 @@ public class EmployeeService {
      * Delete the employee detail 
      * </p> 
      *  
-     * @param email
+     * @param employeeId
      * @return {@link String} 
      */
     public String deleteEmployeeById(int id) throws CustomException {
