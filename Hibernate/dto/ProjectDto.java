@@ -2,6 +2,11 @@ package com.i2i.annotation.dto;
 
 import java.time.LocalDate;
 
+/**
+ * <p>
+ * Attributes of project dto class which display for user
+ * </p>
+ */
 public class ProjectDto {
     private int id;
     private String name;

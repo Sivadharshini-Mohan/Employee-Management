@@ -19,6 +19,11 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+/**
+ * <p>
+ * Attributes of project class which related to database
+ * </p>
+ */
 @Entity
 @Table(name = "project")
 public class Project {

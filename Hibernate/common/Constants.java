@@ -1,5 +1,11 @@
 package com.i2i.annotation.common;
 
+/**
+ * <p>
+ * Constant variables are initialized here
+ * Other classes can use these variables
+ * </p>
+ */
 public class Constants {
     public static final String DRIVE_URL = "jdbc:mysql://localhost/hiberdb?verifyServerCertificate=false&useSSL=true";
     public static final String SQL_USER_ID = "root";

@@ -9,6 +9,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * <p>
+ * Attributes of employee dto class which display for user
+ * </p>
+ */
 public class EmployeeDto { 
     private int id; 
     private String name;  

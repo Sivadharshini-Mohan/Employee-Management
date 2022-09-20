@@ -5,6 +5,11 @@ import com.i2i.annotation.model.Project;
 
 import java.time.LocalDate;
 
+/**
+ * <p>
+ * Attributes of employee project dto class which display for user
+ * </p>
+ */
 public class EmployeeProjectDto {
     private String projectName;
     private LocalDate startDate;

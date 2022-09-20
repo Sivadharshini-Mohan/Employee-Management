@@ -5,6 +5,11 @@ import com.i2i.annotation.model.Employee;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * <p>
+ * Attributes of role dto class which display for user
+ * </p>
+ */
 public class RoleDto {
     private int id;
     private String name;
